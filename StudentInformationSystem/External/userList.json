@@ -1,0 +1,18 @@
+{
+  "roles": {
+    "Student": [
+      "student1@example.com",
+      "student2@example.com",
+      "student3@example.com",
+      "student4@example.com",
+      "student5@example.com"
+    ],
+    "Instructor": [
+      "instructor1@example.com",
+      "instructor2@example.com",
+      "instructor3@example.com",
+      "instructor4@example.com",
+      "instructor5@example.com"
+    ]
+  }
+}

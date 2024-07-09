@@ -1,0 +1,109 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+@* <div class="row justify-content-center">
+    <div class="col-md-4 text-center">
+    </div>
+</div> *@
+<div class="container">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+                <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                <div class="col-lg-7">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                        </div>
+                        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="user">
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Input.FirstName" class="form-control form-control-user" autocomplete="firstname" aria-required="true" placeholder="First Name" />
+                                        @* <label asp-for="Input.FirstName">First Name</label> *@
+                                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Input.LastName" class="form-control form-control-user" autocomplete="lastname" aria-required="true" placeholder="Last Name" />
+                                        @* <label asp-for="Input.LastName">Last Name</label> *@
+                                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Input.Gender" class="form-control form-control-user" autocomplete="gender" aria-required="true" placeholder="Gender" />
+                                    @* <label asp-for="Input.Gender">Gender</label> *@
+                                    <span asp-validation-for="Input.Gender" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Input.Contact" class="form-control form-control-user" autocomplete="contact" aria-required="true" placeholder="Contact Address" />
+                                        @* <label asp-for="Input.Contact">Contact</label> *@
+                                        <span asp-validation-for="Input.Contact" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-floating">
+                                        <select asp-for="Input.ProgramName" class="form-control form-control-user custom-select">
+                                            <option selected>Department / Program</option>
+                                            <option value="Yazılım Mühendisliği">Yazılım Mühendisliği</option>
+                                            <option value="Yazılım Mühendisliği (İngilizce)">Yazılım Mühendisliği (İngilizce)</option>
+                                            <option value="Bilgisayar Mühendisliği">Bilgisayar Mühendisliği</option>
+                                            <option value="Bilgisayar Mühendisliği (İngilizce)">Bilgisayar Mühendisliği (İngilizce)</option>
+                                            <option value="Endüstri Mühendisliği">Endüstri Mühendisliği</option>
+                                            <option value="Endüstri Mühendisliği (İngilizce)">Endüstri Mühendisliği (İngilizce)</option>
+                                            <option value="Kimya Mühendisliği">Kimya Mühendisliği</option>
+                                            <option value="Kimya Mühendisliği (İngilizce)">Kimya Mühendisliği (İngilizce)</option>
+                                            <option value="Makine Mühendisliği">Makine Mühendisliği</option>
+                                            <option value="Makine Mühendisliği (İngilizce)">Makine Mühendisliği (İngilizce)</option>
+                                        </select>
+                                        <span asp-validation-for="Input.ProgramName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Input.Email" class="form-control form-control-user" autocomplete="username" aria-required="true" placeholder="Email" />
+                                        @* <label asp-for="Input.Email">Email</label> *@
+                                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Input.Password" class="form-control form-control-user" autocomplete="new-password" aria-required="true" placeholder="Password" />
+                                        @* <label asp-for="Input.Password">Password</label> *@
+                                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Input.ConfirmPassword" class="form-control form-control-user" autocomplete="confirmpassword" aria-required="true" placeholder="Confirm Password" />
+                                        @* <label asp-for="Input.ConfirmPassword">Confirm Password</label> *@
+                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Register</button>
+                        </form>
+                        <hr>
+                        <div class="text-center">
+                            <a class="small" href="./Login">Already have an account? Login!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@
