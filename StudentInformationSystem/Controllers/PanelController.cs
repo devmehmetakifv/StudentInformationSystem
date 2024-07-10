@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace StudentInformationSystem.Web.Controllers
 {
-	[Authorize(Roles = "Admin")]
-	public class AdminController : Controller
+	[Authorize]
+	public class PanelController : Controller
 	{
 		public IActionResult Index()
 		{
+
 			return View();
 		}
 	}

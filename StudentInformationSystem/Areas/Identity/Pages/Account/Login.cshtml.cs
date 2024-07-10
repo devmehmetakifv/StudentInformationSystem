@@ -14,15 +14,16 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using StudentInformationSystem.Entity.Concrete;
 
 namespace StudentInformationSystem.Web.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -96,7 +97,7 @@ namespace StudentInformationSystem.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("/Panel");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
@@ -109,7 +110,7 @@ namespace StudentInformationSystem.Web.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     Console.WriteLine("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return Redirect("/Panel");
                 }
                 if (result.RequiresTwoFactor)
                 {

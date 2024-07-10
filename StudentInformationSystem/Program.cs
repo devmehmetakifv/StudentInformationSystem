@@ -12,6 +12,7 @@ using StudentInformationSystem.Data.Repositories.Generic.Abstract;
 using StudentInformationSystem.Data.Repositories.Generic.Concrete;
 using Microsoft.AspNetCore.Identity;
 using StudentInformationSystem.Web.Models;
+using StudentInformationSystem.Entity.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
 	.AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
@@ -32,18 +33,14 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
-builder.Services.AddScoped<IInstructorRepository, InstructorRepository>();
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 // Register services.
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
-builder.Services.AddScoped<IInstructorService, InstructorService>();
 builder.Services.AddScoped<IProgramService, ProgramService>();
-builder.Services.AddScoped<IStudentService, StudentService>();
 
 var app = builder.Build();
 
@@ -68,11 +65,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-//using(var scope = app.Services.CreateScope())
+//using (var scope = app.Services.CreateScope())
 //{
-//	var userManager = scope.ServiceProvider.GetService<UserManager<IdentityUser>>();
-//	var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-//	await DatabaseInitializer.SeedData(userManager, roleManager);
+//    var userManager = scope.ServiceProvider.GetService<UserManager<IdentityUser>>();
+//    var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+//    await DatabaseInitializer.SeedData(userManager, roleManager);
 //}
 
 app.Run();

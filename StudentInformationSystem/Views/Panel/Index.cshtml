@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using StudentInformationSystem.Entity.Concrete
+@inject UserManager<User> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User) ?? throw new ArgumentNullException();
+}
+<div class="container mt-5">
+    <h2 class="text-dark">Welcome back, @user.FirstName.</h2>
+    <p class=text-dark">You can access your personal information from this page.</p>
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card card-academician">
+                <div class="row justify-content-center">
+                    <div class="col-md-3 text-center d-flex flex-column justify-content-center ml-3">
+                        <img src="img/undraw_profile.svg">
+                        <h2 class="card-title custom-title">@user.FirstName @user.LastName</h2>
+                        <h5 class="card-text custom-department">@* @Model.Academian.Department *@</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Email: </strong>@user.Email</p>
+                            <p class="card-text"><b>Phone Number: </b>@user.PhoneNumber</p>
+                            <p class="card-text"><strong>Contact: </strong>@user.Contact</p>
+                            <p class="card-text"><strong>Gender: </strong>@user.Gender</p>
+                            @switch(user.RoleId)
+                            {   case 1:
+                                <p class="card-text"><strong>Role: </strong>Admin</p>
+                                    break;
+                                case 2:
+                                <p class="card-text"><strong>Role: </strong>Student</p>
+                                <p class="card-text"><strong>Program: </strong>@user.ProgramID</p>
+									break;
+                                case 3:
+                                <p class="card-text"><strong>Role: </strong>Instructor</p>
+                                <p class="card-text"><strong>Department: </strong>@user.DepartmentID</p>
+                                <p class="card-text"><strong>Hire Date: </strong>@user.HireDate</p>
+									break;
+                            }
+                            <p class="card-text"><strong>Date Of Birth: </strong>@user.DateOfBirth</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

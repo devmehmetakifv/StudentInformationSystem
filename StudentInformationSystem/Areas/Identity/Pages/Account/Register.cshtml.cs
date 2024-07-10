@@ -32,8 +32,6 @@ namespace StudentInformationSystem.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IProgramService _programService;
-        private readonly IStudentService _studentService;
-		private readonly IInstructorService _instructorService;
         private readonly IDepartmentService _departmentService;
 
 		public RegisterModel(
@@ -43,8 +41,6 @@ namespace StudentInformationSystem.Web.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IProgramService programService,
-            IStudentService studentService,
-            IInstructorService instructorService,
             IDepartmentService departmentService)
         {
             _userManager = userManager;
@@ -54,8 +50,6 @@ namespace StudentInformationSystem.Web.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _programService = programService;
-            _studentService = studentService;
-            _instructorService = instructorService;
             _departmentService = departmentService;
         }
 
@@ -106,7 +100,7 @@ namespace StudentInformationSystem.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("/Panel");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
@@ -129,31 +123,7 @@ namespace StudentInformationSystem.Web.Areas.Identity.Pages.Account
 					{
                         _logger.LogInformation("User created a new account with password.");
 						await _userManager.AddToRoleAsync(user, role);
-						switch (role)
-						{
-							case "Student":
-                                var newStudent = new Student(); 
-                                newStudent.FirstName = Input.FirstName;
-                                newStudent.LastName = Input.LastName;
-								newStudent.DateOfBirth = new DateOnly(2004, 03, 18);
-                                newStudent.Gender = Input.Gender;
-                                newStudent.Contact = Input.Contact;
-                                newStudent.ProgramID = _programService.GetProgramIdByName(Input.ProgramName);
-                                await _studentService.AddAsync(newStudent);
-								break;
-                            case "Instructor":
-                                var newInstructor = new Instructor();
-                                newInstructor.FirstName = Input.FirstName;
-                                newInstructor.LastName = Input.LastName;
-                                newInstructor.HireDate = new DateOnly(2019, 03, 18);
-								newInstructor.Gender = Input.Gender;
-								newInstructor.Contact = Input.Contact;
-                                newInstructor.DepartmentID = _programService.GetProgramIdByName(Input.ProgramName);
-                                await _instructorService.AddAsync(newInstructor);
-                                break;
-							default:
-								break;
-						}
+						
 						
 						var userId = await _userManager.GetUserIdAsync(user);
 						var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -174,8 +144,8 @@ namespace StudentInformationSystem.Web.Areas.Identity.Pages.Account
 						else
 						{
 							await _signInManager.SignInAsync(user, isPersistent: false);
-							return LocalRedirect(returnUrl);
-						}
+                            return Redirect("/Panel");
+                        }
 					}
 					foreach (var error in result.Errors)
 					{
