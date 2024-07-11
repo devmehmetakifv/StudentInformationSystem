@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using StudentInformationSystem.Business.Abstract
+@using StudentInformationSystem.Business.Interfaces
+@using StudentInformationSystem.Entity.Concrete
+@inject UserManager<User> UserManager
+@inject IProgramService IProgramService
+@inject IDepartmentService IDepartmentService
+@inject ICourseService ICourseService
+
+@model IEnumerable<StudentInformationSystem.Entity.Concrete.Enrollment>
+@{
+    var user = await UserManager.GetUserAsync(User) ?? throw new ArgumentNullException();
+}
+@{
+	ViewBag.Title = "Enrollments";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <!-- Custom styles for this page -->
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Course Enrollments</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Course Description</th>
+                        <th>Credit</th>
+                        <th>Grade</th>
+                        <th>Department Name</th>
+                        <th>Enrollment Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var enrollment in Model)
+					{
+                        var course = await ICourseService.GetByIdAsync(enrollment.CourseID);
+                        var department = await IDepartmentService.GetByIdAsync(course.DepartmentID);
+                        <tr>
+							<td>@course.Name</td>
+							<td>@course.Description</td>
+							<td>@course.Credit</td>
+							<td>@enrollment.Grade</td>
+							<td>@department.Name</td>
+							<td>@enrollment.EnrollmentDate</td>
+						</tr>
+					}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Course Description</th>
+                        <th>Credit</th>
+                        <th>Grade</th>
+                        <th>Department Name</th>
+                        <th>Enrollment Date</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

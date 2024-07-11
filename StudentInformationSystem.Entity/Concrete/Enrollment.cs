@@ -13,8 +13,8 @@ public partial class Enrollment
     [ForeignKey("Course")]
     public int CourseID { get; set; }
     [Required]
-    [ForeignKey("Student")]
-    public int StudentID { get; set; }
+    [ForeignKey("User")]
+    public string StudentID { get; set; }
     [Required]
     public string Grade { get; set; }
     [Required]

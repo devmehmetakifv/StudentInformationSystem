@@ -17,5 +17,9 @@ namespace StudentInformationSystem.Business.Concrete
 		{
 			_enrollmentRepository = repository;
 		}
+		public IEnumerable<Enrollment> GetEnrollmentsByStudentId(string studentId)
+        {
+            return _enrollmentRepository.GetEnrollmentsByStudentId(studentId);
+        }
 	}
 }

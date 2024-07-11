@@ -65,11 +65,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var userManager = scope.ServiceProvider.GetService<UserManager<IdentityUser>>();
-//    var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-//    await DatabaseInitializer.SeedData(userManager, roleManager);
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
+    var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+    await DatabaseInitializer.SeedData(userManager, roleManager);
+}
 
 app.Run();

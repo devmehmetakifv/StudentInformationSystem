@@ -1,6 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using StudentInformationSystem.Business.Abstract
 @using StudentInformationSystem.Entity.Concrete
 @inject UserManager<User> UserManager
+@inject IProgramService IProgramService
+@inject IDepartmentService IDepartmentService
 @{
     var user = await UserManager.GetUserAsync(User) ?? throw new ArgumentNullException();
 }
@@ -14,7 +17,20 @@
                     <div class="col-md-3 text-center d-flex flex-column justify-content-center ml-3">
                         <img src="img/undraw_profile.svg">
                         <h2 class="card-title custom-title">@user.FirstName @user.LastName</h2>
-                        <h5 class="card-text custom-department">@* @Model.Academian.Department *@</h5>
+                        @if (user.RoleId == 3)
+                        {
+                            @if (user.DepartmentID.HasValue)
+                            {
+                                var department = await IDepartmentService.GetByIdAsync(user.DepartmentID.Value);
+                                <h5 class="card-text custom-department">
+                                    @department.Name
+                                </h5>
+                            }
+                            else
+                            {
+                                <h5 class="card-text custom-department">Waiting Admin...</h5>
+                            }
+                        }
                     </div>
                     <div class="col-md-6">
                         <div class="card-body">
@@ -28,11 +44,30 @@
                                     break;
                                 case 2:
                                 <p class="card-text"><strong>Role: </strong>Student</p>
-                                <p class="card-text"><strong>Program: </strong>@user.ProgramID</p>
+                                @if (user.ProgramID.HasValue)
+                                {
+                                    var program = await IProgramService.GetByIdAsync(user.ProgramID.Value);
+                                    <p class="card-text"><strong>Program: </strong>@program.Name</p>
+                                }
+                                else
+                                {
+                                    <p class="card-text"><strong>Program: </strong>Not available</p>
+                                }
 									break;
                                 case 3:
                                 <p class="card-text"><strong>Role: </strong>Instructor</p>
-                                <p class="card-text"><strong>Department: </strong>@user.DepartmentID</p>
+                                @if (user.RoleId == 3)
+                                {
+                                    @if (user.DepartmentID.HasValue)
+                                    {
+                                        var department = await IDepartmentService.GetByIdAsync(user.DepartmentID.Value);
+                                        <p class="card-text"><strong>Department: </strong>@department.Name</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="card-text"><strong>Department: </strong>Waiting Admin...</p>
+                                    }
+                                }
                                 <p class="card-text"><strong>Hire Date: </strong>@user.HireDate</p>
 									break;
                             }

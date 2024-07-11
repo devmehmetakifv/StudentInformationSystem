@@ -10,5 +10,6 @@ namespace StudentInformationSystem.Business.Abstract
 {
 	public interface IEnrollmentService : IGenericService<Enrollment>
 	{
+		public IEnumerable<Enrollment> GetEnrollmentsByStudentId(string studentId);
 	}
 }

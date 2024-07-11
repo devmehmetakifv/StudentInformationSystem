@@ -10,5 +10,6 @@ namespace StudentInformationSystem.Data.Repositories.Abstract
 {
     public interface IEnrollmentRepository : IGenericRepository<Enrollment>
 	{
+		public IEnumerable<Enrollment> GetEnrollmentsByStudentId(string studentId);
 	}
 }

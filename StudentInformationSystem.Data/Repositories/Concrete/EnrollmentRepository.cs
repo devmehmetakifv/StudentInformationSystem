@@ -14,5 +14,9 @@ namespace StudentInformationSystem.Data.Repositories.Concrete
 		public EnrollmentRepository(ApplicationDbContext context) : base(context)
 		{
 		}
+		public IEnumerable<Enrollment> GetEnrollmentsByStudentId(string studentId)
+        {
+            return _context.Enrollments.Where(e => e.StudentID == studentId).ToList();
+        }
 	}
 }
