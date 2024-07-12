@@ -12,13 +12,13 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @{
-    var user = await UserManager.GetUserAsync(User);
-    if (user == null)
+    if (!SignInManager.IsSignedIn(User))
     {
         <script>
-            window.location.href = "/Identity/Account/Login";
+             window.location.href = "/Identity/Account/Login";
         </script>
     }
+    var user = await UserManager.GetUserAsync(User);
 }
 
 <!DOCTYPE html>
