@@ -1,0 +1,87 @@
+﻿@using StudentInformationSystem.Entity.Concrete
+@inject SignInManager<User> SignInManager
+
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Panel">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Student Information System <sup>v1.0</sup></div>
+    </a>
+
+    <br />
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <br />
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Manage Profile
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">
+            <i class="fas fa-phone fa-sm"></i>
+            <span>Edit Contact Information</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Email">
+            <i class="fas fa-envelope fa-sm"></i>
+            <span>Edit Email Address</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./ChangePassword">
+            <i class="fas fa-lock fa-sm"></i>
+            <span>Change Password</span>
+        </a>
+    </li>
+
+    <br />
+
+    <hr class="sidebar-divider my-0">
+
+    <br />
+
+    <div class="sidebar-heading">
+        Navigation
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Support">
+            <i class="fa fa-fw fa-medkit"></i>
+            <span>Support</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="/Panel">
+            <i class="fas fa-fw fa-home"></i>
+            <span>Back To Homepage</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Identity/Account/Login">
+            <button id="logout" type="submit" class="nav-link btn btn-link border-0">
+                <i class="fas fa-sign-out-alt fa-lg fa-fw"></i>
+                <span>Logout</span>
+            </button>
+        </form>
+    </li>
+
+    <br />
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>

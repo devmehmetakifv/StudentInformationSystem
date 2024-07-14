@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentInformationSystem.Data;
 
@@ -11,9 +12,11 @@ using StudentInformationSystem.Data;
 namespace StudentInformationSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240714113213_18")]
+    partial class _18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,53 +279,6 @@ namespace StudentInformationSystem.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("StudentInformationSystem.Entity.Concrete.Ticket", b =>
-                {
-                    b.Property<int>("TicketId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
-
-                    b.Property<string>("TicketContent")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TicketDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TicketRespondContent")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TicketRespondSenderUserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TicketSenderRole")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TicketSenderUserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TicketTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TicketType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isResolved")
-                        .HasColumnType("bit");
-
-                    b.HasKey("TicketId");
-
-                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("StudentInformationSystem.Entity.Concrete.User", b =>

@@ -34,6 +34,9 @@ builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 // Register services.
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
@@ -41,6 +44,9 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 builder.Services.AddScoped<IProgramService, ProgramService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 var app = builder.Build();
 

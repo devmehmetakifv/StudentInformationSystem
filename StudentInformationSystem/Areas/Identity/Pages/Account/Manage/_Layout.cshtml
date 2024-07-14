@@ -1,26 +1,19 @@
-﻿@*
-    Roles:
-    1: Admin
-    2: Student
-    3: Instructor
-*@
+﻿@{
+    @using Microsoft.AspNetCore.Identity
+    @using StudentInformationSystem.Business.Abstract
+    @using StudentInformationSystem.Entity.Concrete
 
-@using Microsoft.AspNetCore.Identity
-@using StudentInformationSystem.Business.Abstract
-@using StudentInformationSystem.Entity.Concrete
+    @inject SignInManager<User> SignInManager
+    @inject UserManager<User> UserManager
 
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
-@{
     if (!SignInManager.IsSignedIn(User))
     {
         <script>
-             window.location.href = "/Identity/Account/Login";
+                window.location.href = "/Identity/Account/Login";
         </script>
     }
     var user = await UserManager.GetUserAsync(User);
 }
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,14 +45,13 @@
         @switch (user.RoleId)
         {
             case 1:
-                @await Html.PartialAsync("PanelShared/General/SidebarPartials/_AdminSidebar",user);
+                <partial name="Partials/_ManageNavAdmin" />
                 break;
             case 2:
-                @await Html.PartialAsync("PanelShared/General/SidebarPartials/_StudentSidebar", user)
-                ;
+                <partial name="Partials/_ManageNavStudent" />
                 break;
             case 3:
-                @await Html.PartialAsync("PanelShared/General/SidebarPartials/_InstructorSidebar", user)
+                <partial name="Partials/_ManageNavInstructor" />
                 break;
         }
         <!-- Content Wrapper -->
@@ -73,16 +65,16 @@
                         <i class="fa fa-bars"></i>
                     </button>
                     <div class="input-group">
-                        @switch(user.RoleId)
+                        @switch (user.RoleId)
                         {
                             case 1:
-                                <h3 class="form-control bg-light border-0 small">Admin Panel </h3>
+                                <h3 class="form-control bg-light border-0 small">Admin Management Panel </h3>
                                 break;
                             case 2:
-                                <h3 class="form-control bg-light border-0 small">Student Panel </h3>
+                                <h3 class="form-control bg-light border-0 small">Student Management Panel </h3>
                                 break;
                             case 3:
-                                <h3 class="form-control bg-light border-0 small">Instructor Panel </h3>
+                                <h3 class="form-control bg-light border-0 small">Instructor Management Panel </h3>
                                 break;
                         }
                     </div>
@@ -95,6 +87,22 @@
                                 <img class="img-profile rounded-circle"
                                      src="~/img/undraw_profile.svg">
                             </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+                            </div>
                         </li>
                         <div class="topbar-divider d-none d-sm-block"></div>
                         <li class="nav-item dropdown no-arrow mx-1">
@@ -104,7 +112,7 @@
                                 </button>
                             </form>
                             @* <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a> *@
                         </li>
                     </ul>
@@ -143,3 +151,7 @@
     <script src="~/js/demo/datatables-demo.js"></script>
 </body>
 </html>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

@@ -1,0 +1,16 @@
+﻿using StudentInformationSystem.Business.Generic.Abstract;
+using StudentInformationSystem.Entity.Concrete;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace StudentInformationSystem.Business.Interfaces
+{
+    public interface IUserService : IGenericService<User>
+    {
+        public string GetUserEmailAddress(User user);
+        public string GetUserRoleByUserName(string userName);
+    }
+}
