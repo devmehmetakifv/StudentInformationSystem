@@ -17,6 +17,10 @@ namespace StudentInformationSystem.Business.Generic.Concrete
             _repository = repository;
         }
 
+        public async Task<T> GetByIdAsync(string id)
+        {
+            return await _repository.GetById(id);
+        }
         public async Task<T> GetByIdAsync(int id)
         {
             return await _repository.GetById(id);
@@ -37,6 +41,14 @@ namespace StudentInformationSystem.Business.Generic.Concrete
             await _repository.Update(entity);
         }
 
+        public async Task DeleteAsync(string id)
+        {
+            var entity = await _repository.GetById(id);
+            if (entity != null)
+            {
+                await _repository.Delete(entity);
+            }
+        }
         public async Task DeleteAsync(int id)
         {
             var entity = await _repository.GetById(id);

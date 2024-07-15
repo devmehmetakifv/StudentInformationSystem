@@ -21,7 +21,7 @@ builder.Services.AddControllersWithViews();
 
 //Register ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
 	.AddRoles<IdentityRole>()
@@ -37,6 +37,7 @@ builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IInstructorMessageRepository, InstructorMessageRepository>();
 
 // Register services.
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IProgramService, ProgramService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IInstructorMessageService, InstructorMessageService>();
 
 var app = builder.Build();
 

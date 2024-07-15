@@ -26,5 +26,13 @@ namespace StudentInformationSystem.Data.Repositories.Concrete
             var user = _context.Users.FirstOrDefault(u => u.UserName == userName);
             return _roleRepository.GetById(user.RoleId).Result.Name;
         }
+        public User GetStudentByProgramId(int programId)
+        {
+            return _context.Users.FirstOrDefault(u => u.ProgramID == programId);
+        }
+        public IEnumerable<User> GetInstructorsByDepartment(int departmentId)
+        {
+            return _context.Users.Where(u => u.DepartmentID == departmentId).ToList();
+        }
     }
 }

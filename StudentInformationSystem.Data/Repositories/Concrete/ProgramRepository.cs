@@ -18,5 +18,9 @@ namespace StudentInformationSystem.Data.Repositories.Concrete
 		{
 			return _context.Programs.Where(p => p.Name == programName).Select(p => p.ID).FirstOrDefault();
 		}
+		public IEnumerable<Program> GetProgramsWithDepartmendId(int departmendId)
+        {
+            return _context.Programs.Where(p => p.DepartmentID == departmendId).ToList();
+        }
 	}
 }

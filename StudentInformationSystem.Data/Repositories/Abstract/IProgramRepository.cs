@@ -11,5 +11,6 @@ namespace StudentInformationSystem.Data.Repositories.Abstract
     public interface IProgramRepository : IGenericRepository<Program>
 	{
 		public int GetProgramIdByName(string programName);
+		public IEnumerable<Program> GetProgramsWithDepartmendId(int departmendId);
 	}
 }

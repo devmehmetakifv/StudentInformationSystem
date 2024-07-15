@@ -19,4 +19,5 @@ public partial class ApplicationDbContext : IdentityDbContext<User>
     public virtual DbSet<Program> Programs { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
     public virtual DbSet<Ticket> Tickets { get; set; }
+    public virtual DbSet<InstructorMessage> InstructorMessages { get; set; }
 }

@@ -12,5 +12,7 @@ namespace StudentInformationSystem.Data.Repositories.Abstract
     {
         public string GetUserEmailAddress(User user);
         public string GetUserRoleByUserName(string userName);
+        public User GetStudentByProgramId(int programId);
+        public IEnumerable<User> GetInstructorsByDepartment(int departmentId);
     }
 }

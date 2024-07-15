@@ -1,0 +1,33 @@
+﻿@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+<div class="page-center">
+    <div class="container" id="container">
+        <div class="centered-text">
+            <h2 class="text-dark">Send Announcement</h2>
+            <h5 class="text-dark">You can send an announcement to your students from this page.</h5>
+        </div>
+        <br />
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="alert alert-success" role="alert">
+                @successMessage
+            </div>
+        }
+        <form method="post" action="/Panel/PostNewAnnouncement">
+            <div class="form-group">
+                <label for="AnnouncementTitle" class="text-dark">Title</label>
+                <input type="text" class="form-control" id="AnnouncementTitle" name="announcementTitle" required>
+            </div>
+            <div class="form-group">
+                <label for="AnnouncementContent" class="text-dark">Content</label>
+                <textarea class="form-control" id="AnnouncementContent" name="announcementContent" rows="10" cols="18"></textarea>
+            </div>
+            <input type="hidden" name="senderEmail" id="senderName" value="@User.Identity.Name" />
+
+            <div>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
+</div>

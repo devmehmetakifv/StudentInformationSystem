@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using StudentInformationSystem.Entity.Concrete;
 using StudentInformationSystem.Data;
 using StudentInformationSystem.Business.Interfaces;
+using StudentInformationSystem.Business.Abstract;
 
 namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
 {

@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using StudentInformationSystem.Business.Abstract
+@using StudentInformationSystem.Business.Interfaces
+@using StudentInformationSystem.Entity.Concrete
+@inject UserManager<User> UserManager
+@inject IProgramService IProgramService
+@inject IDepartmentService IDepartmentService
+@inject ICourseService ICourseService
+@inject IUserService IUserService
+
+@model IEnumerable<StudentInformationSystem.Entity.Concrete.InstructorMessage>
+@{
+    var user = await UserManager.GetUserAsync(User) ?? throw new ArgumentNullException();
+}
+@{
+    ViewBag.Title = "Announcements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <!-- Custom styles for this page -->
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Instructor Messages</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Instructor</th>
+                        <th>Announcement Title</th>
+                        <th>Announcement Content</th>
+                        <th>Sent Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var instructorMessage in Model)
+                    {
+                        var instructor = await IUserService.GetByIdAsync(instructorMessage.InstructorID);
+                        <tr>
+                            <td>@instructor.FirstName @instructor.LastName</td>
+                            <td>@instructorMessage.Title</td>
+                            <td>@instructorMessage.Content</td>
+                            <td>@instructorMessage.SentDate</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Instructor</th>
+                        <th>Announcement Title</th>
+                        <th>Announcement Content</th>
+                        <th>Sent Date</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

@@ -32,6 +32,10 @@ namespace StudentInformationSystem.Data.Repositories.Generic.Concrete
             return await _context.Set<T>().ToListAsync();
         }
 
+        public async Task<T> GetById(string id)
+        {
+            return await _context.Set<T>().FindAsync(id) ?? throw new ArgumentNullException();
+        }
         public async Task<T> GetById(int id)
         {
             return await _context.Set<T>().FindAsync(id) ?? throw new ArgumentNullException();

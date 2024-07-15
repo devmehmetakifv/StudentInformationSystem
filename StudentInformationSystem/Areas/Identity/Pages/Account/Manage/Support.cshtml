@@ -5,7 +5,7 @@
 @inject UserManager<User> UserManager
 @inject ApplicationDbContext _context
 @{
-    ViewData["Title"] = "Destek Ekibine Ulaş";
+    ViewData["Title"] = "Need Help?";
     ViewData["ActivePage"] = ManageNavPages.Support;
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
 
@@ -34,49 +34,56 @@
     }
 }
 
-<h4 id="profile-title"><i class="fas fa-headset fa-sm"></i>   @ViewData["Title"]</h4>
+<h4 id="profile-title" class="text-dark"><i class="fas fa-headset fa-sm"></i>   @ViewData["Title"]</h4>
 <partial name="_StatusMessage" for="StatusMessage" />
-<p>Karşılaştığınız sorunlar ve önerileriniz için bizimle iletişime geçin.</p>
+<p>If you face any problem or you have a suggestion to make, please let us know from the form below.</p>
 <hr />
 <div class="row">
     <div class="col-md-8">
         <form asp-page-handler="SubmitTicket" method="POST">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <label asp-for="Input.TicketType" class="form-label"></label>
-                <select asp-for="Input.TicketType" class="form-select">
-                    <option value=""></option>
-                    <option value="Öneri">Öneri</option>
-                    <option value="Sorun">Sorun</option>
-                    <option value="Acil Sorun">Acil Sorun</option>
-                </select>
-                <span asp-validation-for="Input.TicketType" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <label asp-for="Input.TicketTitle" class="form-label"></label>
+                        <input asp-for="Input.TicketTitle" class="form-control" autocomplete="ticketTitle" />
+                        <span asp-validation-for="Input.TicketTitle" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <label asp-for="Input.TicketType" class="form-label"></label>
+                        <select asp-for="Input.TicketType" class="form-control">
+                            <option value=""></option>
+                            <option value="Suggestion">&#8505;Suggestion</option>
+                            <option value="Emergency">&#9888;Emergency</option>
+                            <option value="High Emergency">&#9762;High Emergency</option>
+                        </select>
+                        <span asp-validation-for="Input.TicketType" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.TicketTitle" class="form-control" autocomplete="ticketTitle"/>
-                <label asp-for="Input.TicketTitle" class="form-label"></label>
-                <span asp-validation-for="Input.TicketTitle" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <textarea asp-for="Input.TicketContent" class="form-control" autocomplete="ticketContent" rows="5"></textarea>
                 <label asp-for="Input.TicketContent" class="form-label"></label>
+                <textarea asp-for="Input.TicketContent" class="form-control" autocomplete="ticketContent" rows="5"></textarea>
                 <span asp-validation-for="Input.TicketContent" class="text-danger"></span>
                 <input type="hidden" name="userName" value="@User.Identity.Name" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Gönder</button>
+            <br />
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
         </form>
     </div>
 </div>
 <hr />
-<h4 id="profile-title"><i class="fas fa-headset fa-sm"></i>   Cevaplanmış Destek Bildirimleriniz</h4>
+<h4 id="profile-title" class="text-dark"><i class="fas fa-headset fa-sm"></i>   Answered Tickets</h4>
 @if (answeredTickets.Count == 0)
 {
-    <p>Cevaplanmış destek bildiriminiz bulunmamaktadır.</p>
+    <p>You do not have any answered support tickets.</p>
 }
 else{
     foreach (var ticket in answeredTickets)
     {
-        if (@ticket.TicketType == "Öneri")
+        if (@ticket.TicketType == "Suggestion")
         {
             <div class="card mb-3" style="max-width: 100%; background-color: #4755d1;">
                 <div class="card-header text-white">
@@ -120,7 +127,7 @@ else{
 
             </div>
         }
-        if (@ticket.TicketType == "Sorun")
+        if (@ticket.TicketType == "Emergency")
         {
             <div class="card mb-3" style="max-width: 100%; background-color: #b5cf36;">
                 <div class="card-header text-white">
@@ -163,7 +170,7 @@ else{
 
             </div>
         }
-        if (@ticket.TicketType == "Acil Sorun")
+        if (@ticket.TicketType == "High Emergency")
         {
             <div class="card mb-3" style="max-width: 100%; background-color: #de0f00;">
                 <div class="card-header text-white">
@@ -209,15 +216,15 @@ else{
         }
     }
 }
-<h4 id="profile-title"><i class="fas fa-headset fa-sm" style="color: #A82F3A;"></i>   Aktif Destek Bildirimleriniz</h4>
+<h4 id="profile-title" class="text-dark"><i class="fas fa-headset fa-sm""></i>   Active Tickets</h4>
 @if (unansweredTickets.Count == 0)
 {
-    <p>Aktif destek bildiriminiz bulunmamaktadır.</p>
+    <p>You do not have any active support tickets.</p>
 }
 else{
     foreach (var ticket in unansweredTickets)
     {
-        if (@ticket.TicketType == "Öneri")
+        if (@ticket.TicketType == "Suggestion")
         {
                    <div class="card mb-3" style="max-width: 100%; background-color: #4755d1;">
                        <div class="card-header text-white">
@@ -259,7 +266,7 @@ else{
 
                    </div>
         }
-        if (@ticket.TicketType == "Sorun")
+        if (@ticket.TicketType == "Emergency")
         {
                    <div class="card mb-3" style="max-width: 100%; background-color: #b5cf36;">
                        <div class="card-header text-white">
@@ -300,7 +307,7 @@ else{
 
                    </div>
         }
-        if (@ticket.TicketType == "Acil Sorun")
+        if (@ticket.TicketType == "High Emergency")
         {
                    <div class="card mb-3" style="max-width: 100%; background-color: #de0f00;">
                        <div class="card-header text-white">
