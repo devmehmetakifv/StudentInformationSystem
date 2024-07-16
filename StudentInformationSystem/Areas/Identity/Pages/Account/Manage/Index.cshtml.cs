@@ -32,7 +32,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Phone]
-            [Display(Name = "Telefon Numarası")]
+            [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
         }
 

@@ -1,7 +1,7 @@
 ﻿@page
 @model EmailModel
 @{
-    ViewData["Title"] = "E-mail Ayarları";
+    ViewData["Title"] = "Update Email Address";
     ViewData["ActivePage"] = ManageNavPages.Email;
 }
 
@@ -18,7 +18,7 @@
                 <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
             </div>
             <br />
-            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary hover-gray">E-maili Değiştir</button>
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary hover-gray">Update</button>
         </form>
     </div>
 </div>

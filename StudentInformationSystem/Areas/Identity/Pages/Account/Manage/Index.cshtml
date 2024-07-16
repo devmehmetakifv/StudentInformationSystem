@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Telefon Numarasını Güncelle";
+    ViewData["Title"] = "Update Phone Number";
     ViewData["ActivePage"] = ManageNavPages.Index;
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
 
@@ -20,7 +20,7 @@
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             <br />
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary btn-yeniDuyuruOlustur">Kaydet</button>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary btn-yeniDuyuruOlustur">Save</button>
         </form>
     </div>
 </div>

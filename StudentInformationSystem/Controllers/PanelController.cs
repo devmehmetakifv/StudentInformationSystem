@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using StudentInformationSystem.Business.Abstract;
 using StudentInformationSystem.Business.Interfaces;
 using StudentInformationSystem.Entity.Concrete;
+using StudentInformationSystem.Web.Hubs;
 
 namespace StudentInformationSystem.Web.Controllers
 {
@@ -14,7 +16,11 @@ namespace StudentInformationSystem.Web.Controllers
 		private readonly IUserService _userService;
 		private readonly UserManager<User> _userManager;
 		private readonly IInstructorMessageService _instructorMessageService;
-        public PanelController(IEnrollmentService enrollmentService, UserManager<User> userManager, IUserService userService, IInstructorMessageService instructorMessageService)
+        public PanelController(
+			IEnrollmentService enrollmentService,
+			UserManager<User> userManager,
+			IUserService userService,
+			IInstructorMessageService instructorMessageService)
         {
             _enrollmentService = enrollmentService;
 			_userManager = userManager;
@@ -34,7 +40,8 @@ namespace StudentInformationSystem.Web.Controllers
                 return NotFound();
             }
 			var enrollments = _enrollmentService.GetEnrollmentsByStudentId(user.Id);
-			return View(enrollments);
+
+            return View(enrollments);
 		}
 		[Authorize(Roles = "Instructor")]
 		public async Task<IActionResult> Students()
@@ -84,5 +91,10 @@ namespace StudentInformationSystem.Web.Controllers
 			var instructorMessages = _instructorMessageService.GetInstructorMessagesByProgramId(user.ProgramID.Value);
             return View(instructorMessages);
         }
+		[Authorize(Roles = "Instructor")]
+		public IActionResult Broadcast()
+		{
+			return View();
+		}
 	}
 }

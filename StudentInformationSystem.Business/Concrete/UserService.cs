@@ -48,5 +48,9 @@ namespace StudentInformationSystem.Business.Services
         {
             return _userRepository.GetInstructorsByDepartment(departmentId);
         }
+        public User GetUserByEmail(string email)
+        {
+            return _userRepository.GetUserByEmail(email);
+        }
     }
 }

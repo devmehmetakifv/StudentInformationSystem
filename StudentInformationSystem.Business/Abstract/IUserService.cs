@@ -14,5 +14,6 @@ namespace StudentInformationSystem.Business.Abstract
         public string GetUserRoleByUserName(string userName);
         public IEnumerable<User> GetStudentsByInstructor(int departmendId);
         public IEnumerable<User> GetInstructorsByDepartment(int departmentId);
+        public User GetUserByEmail(string email);
     }
 }

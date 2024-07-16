@@ -13,11 +13,15 @@ using StudentInformationSystem.Data.Repositories.Generic.Concrete;
 using Microsoft.AspNetCore.Identity;
 using StudentInformationSystem.Web.Models;
 using StudentInformationSystem.Entity.Concrete;
+using StudentInformationSystem.Web.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add SignalR services.
+builder.Services.AddSignalR();
 
 //Register ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -66,6 +70,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapHub<ChatHub>("/ChatHub");
 
 app.MapRazorPages();
 

@@ -1,0 +1,41 @@
+﻿@using StudentInformationSystem.Business.Abstract
+@inject IUserService UserService
+@inject IDepartmentService DepartmentService
+@{
+    // var successMessage = TempData["SuccessMessage"] as string;
+    var user = UserService.GetUserByEmail(User.Identity.Name);
+    var department = await DepartmentService.GetByIdAsync(user.DepartmentID.Value);
+}
+<div class="page-center">
+    <div class="container" id="container">
+        <div class="centered-text">
+            <h2 class="text-dark">Send A Broadcast To All Online Students</h2>
+            <h5 class="text-dark">You can send a broadcast which will be sent to all online students on system.</h5>
+        </div>
+        <br />
+@*         @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="alert alert-success" role="alert">
+                @successMessage
+            </div>
+        } *@
+        <div class="form-group">
+            <label for="AnnouncementTitle" class="text-dark">Broadcast</label>
+            <input type="text" class="form-control" id="AnnouncementTitle" name="broadcastContent" required>
+        </div>
+        <input type="hidden" name="senderEmail" id="userNameInput" value="@user.FirstName @user.LastName" />
+        <input type="hidden" name="senderEmail" id="departmentInput" value="@department.Name" />
+        <div>
+            <button type="submit" class="btn btn-primary" id="sendButton">Send</button>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row p-1">
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
+</div>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/broadcast.js"></script>

@@ -34,5 +34,9 @@ namespace StudentInformationSystem.Data.Repositories.Concrete
         {
             return _context.Users.Where(u => u.DepartmentID == departmentId).ToList();
         }
+        public User GetUserByEmail(string email)
+        {
+            return _context.Users.FirstOrDefault(u => u.Email == email);
+        }
     }
 }

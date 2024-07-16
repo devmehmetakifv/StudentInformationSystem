@@ -47,7 +47,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "Yeni Email")]
+            [Display(Name = "New Email")]
             public string NewEmail { get; set; }
         }
 
