@@ -67,7 +67,7 @@
             <!-- Main Content  -->
             <div id="content">
                 <!-- Topbar  -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow" id="mainNav">
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -109,6 +109,7 @@
                         </li>
                     </ul>
                 </nav>
+                <br />
                 <div class="container-fluid">
                     @RenderBody()
                 </div>
@@ -141,5 +142,9 @@
     <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/demo/datatables-demo.js"></script>
+
+    <!-- SignalR -->
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/broadcast.js"></script>
 </body>
 </html>

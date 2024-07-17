@@ -11328,3 +11328,19 @@ body.sidebar-toggled footer.sticky-footer {
         .card-text a:hover {
             text-decoration: underline;
         }
+
+@keyframes fallDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.fallDownAnimation {
+    animation: fallDown 0.5s ease-out forwards;
+}
