@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StudentInformationSystem.Business.Abstract;
 using StudentInformationSystem.Business.Concrete;
@@ -10,8 +11,6 @@ using StudentInformationSystem.Data.Repositories.Abstract;
 using StudentInformationSystem.Data.Repositories.Concrete;
 using StudentInformationSystem.Data.Repositories.Generic.Abstract;
 using StudentInformationSystem.Data.Repositories.Generic.Concrete;
-using Microsoft.AspNetCore.Identity;
-using StudentInformationSystem.Web.Models;
 using StudentInformationSystem.Entity.Concrete;
 using StudentInformationSystem.Web.Hubs;
 
@@ -79,11 +78,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-using (var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
-    var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-    await DatabaseInitializer.SeedData(userManager, roleManager);
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
+//    var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+//    await DatabaseInitializer.SeedData(userManager, roleManager);
+//}
 
 app.Run();

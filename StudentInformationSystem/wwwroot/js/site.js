@@ -1,4 +1,12 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$('.reply-ticket-btn').click(function () {
+    console.log("Work!");
+    var ticketId = $(this).data('ticket-id');
+    var userNameWhoReplies = $(this).data('user-name');
+    $('#replyTicketId').val(ticketId);
+    $('#userNameWhoReplies').val(userNameWhoReplies);
+    $('#replyTicketModal').modal('show');
+});
 
-// Write your JavaScript code.
+$('#replyTicketForm').submit(function (e) {
+    $('#replyTicketModal').modal('hide');
+});

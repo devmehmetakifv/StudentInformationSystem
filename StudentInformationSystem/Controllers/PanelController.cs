@@ -1,31 +1,32 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using StudentInformationSystem.Business.Abstract;
 using StudentInformationSystem.Business.Interfaces;
 using StudentInformationSystem.Entity.Concrete;
-using StudentInformationSystem.Web.Hubs;
 
 namespace StudentInformationSystem.Web.Controllers
 {
-	[Authorize]
+    [Authorize]
 	public class PanelController : Controller
 	{
 		private readonly IEnrollmentService _enrollmentService;
 		private readonly IUserService _userService;
 		private readonly UserManager<User> _userManager;
 		private readonly IInstructorMessageService _instructorMessageService;
+		private readonly ITicketService _ticketService;
         public PanelController(
 			IEnrollmentService enrollmentService,
 			UserManager<User> userManager,
 			IUserService userService,
-			IInstructorMessageService instructorMessageService)
+			IInstructorMessageService instructorMessageService,
+			ITicketService ticketService)
         {
             _enrollmentService = enrollmentService;
 			_userManager = userManager;
 			_userService = userService;
 			_instructorMessageService = instructorMessageService;
+			_ticketService = ticketService;
         }
         public IActionResult Index()
 		{
@@ -96,5 +97,44 @@ namespace StudentInformationSystem.Web.Controllers
 		{
 			return View();
 		}
-	}
+		[Authorize(Roles = "Admin")]
+		public IActionResult UserManagement()
+		{
+			return View(); 
+		}
+        [Authorize(Roles = "Admin")]
+        public IActionResult CourseManagement()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult ProgramManagement()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult DepartmentManagement()
+        {
+            return View();
+        }
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> SupportTickets()
+		{
+			var tickets = await _ticketService.GetAllAsync();
+			return View(tickets);
+		}
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ReplyToTicket(int replyTicketId, string reply, string userNameWhoReplies)
+        {
+            var ticket = await _ticketService.GetByIdAsync(replyTicketId);
+            ticket.TicketRespondContent = reply;
+            ticket.TicketRespondSenderUserName = userNameWhoReplies;
+            ticket.isResolved = true;
+            await _ticketService.UpdateAsync(ticket);
+            
+            var tickets = await _ticketService.GetAllAsync();
+            return View("SupportTickets", tickets);
+        }
+    }
 }

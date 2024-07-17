@@ -11344,3 +11344,24 @@ body.sidebar-toggled footer.sticky-footer {
 .fallDownAnimation {
     animation: fallDown 0.5s ease-out forwards;
 }
+
+@keyframes fadeAway {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
+
+.fadeAwayAnimation {
+    animation: fadeAway 0.5s ease-out forwards;
+}
+
+#mainNav {
+    position: relative; /* or 'fixed', 'absolute', 'sticky', depending on your layout */
+    z-index: 1000; /* Example value, adjust as needed */
+}

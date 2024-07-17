@@ -1,0 +1,98 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using StudentInformationSystem.Business.Interfaces
+@using StudentInformationSystem.Entity.Concrete
+@inject UserManager<User> UserManager
+@inject IRoleService RoleService
+@model IEnumerable<StudentInformationSystem.Entity.Concrete.Ticket>
+@{
+	ViewData["Title"] = "Support Tickets";
+	<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+}
+<h4 id="profile-title" class="text-dark"><i class="fa-solid fa-headset fa"></i>   @ViewData["Title"]</h4>
+<br />
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Students</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Ticket Type</th>
+                        <th>Sender Role</th>
+                        <th>Sender</th>
+                        <th>Title</th>
+                        <th>Content</th>
+                        <th>Date</th>
+                        <th>Solved?</th>
+                        <th>Answer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var ticket in Model)
+                {
+                    var sender = await UserManager.FindByNameAsync(ticket.TicketSenderUserName);
+                    var senderRole = await RoleService.GetByIdAsync(sender.RoleId);
+                    <tr>
+                        <td>@ticket.TicketType</td>
+                        <td>@senderRole.Name</td>
+                        <td>@sender.FirstName @sender.LastName</td>
+                        <td>@ticket.TicketTitle</td>
+                        <td>@ticket.TicketContent</td>
+                        <td><p>@ticket.TicketDate</p></td>
+                        <td>
+                            @if(ticket.isResolved == false)
+                            {
+                                <p>No</p>
+                            }
+                            else if(ticket.isResolved == true)
+                            {
+                                <p>Yes</p>
+                            }
+                        </td>
+                        @if(ticket.isResolved == false)
+                        {
+                        <form method="POST">
+                            <td>
+                                <button type="button"
+                                class="btn reply-ticket-btn"
+                                data-ticket-id="@ticket.TicketId"
+                                data-user-name="@User.Identity?.Name">
+                                <i class="fa-solid fa-reply fa" style="color: #000000;"></i>
+                                </button>
+                            </td>
+                        </form>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade shadow-lg justify-content-center" id="replyTicketModal" tabindex="-1" role="dialog" style="z-index:300000000000;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="POST" action="/Panel/ReplyToTicket" id="replyTicketForm">
+                    <div class="form-group text-center">
+                        <h2 class="text-dark">Answer to Support Ticket</h2>
+                        <p class="text-dark">Write down your answer and then hit "Send".</p>
+                        <input name="replyTicketId" type="hidden" id="replyTicketId" />
+                        <input name="userNameWhoReplies" type="hidden" id="userNameWhoReplies" />
+                        <textarea name="reply" id="reply" class="form-control" rows="3"></textarea>
+                        <button type="submit" class="btn btn-primary text-center">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/site.js"></script>

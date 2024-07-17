@@ -1,25 +1,45 @@
 ﻿"use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
+var connection = new signalR.HubConnectionBuilder()
+    .withUrl("/ChatHub")
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
 
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, department, message) {
-    console.log(user, department, message);
-    var targetNavbar = document.getElementById('mainNav'); // Use the correct ID or class selector
 
-    // Create h3 element
-    var h3 = document.createElement('h3');
-    h3.className = 'form-control bg-light border-0 small fallDownAnimation'; // Add the animation class here
-    h3.textContent = `Broadcast from ${user}[${department}]: ${message}`;
+    var h3 = document.getElementById('broadcastMessage');
+    if (h3 !== null) {
+        h3.textContent = `Broadcast from ${user}[${department}]: ${message}`;
+        setTimeout(() => {
+            h3.className = 'form - control bg - light border - 0 small fadeAwayAnimation';
+        }, 10000);
 
-    // Append h3 to the target navbar
-    targetNavbar.appendChild(h3);
+        setTimeout(() => {
+            h3.remove();
+        }, 11000);
+    }
+    else {
+        var targetNavbar = document.getElementById('mainNav');
 
-    // Optional: Remove the h3 after some time
-    setTimeout(() => {
-        h3.remove();
-    }, 5000); // Adjust time as needed
+        var h3 = document.createElement('h3');
+        h3.id = 'broadcastMessage';
+        h3.className = 'form-control bg-light border-0 small fallDownAnimation';
+        h3.style.position = 'relative';
+        h3.style.zIndex = 500;
+        h3.textContent = `Broadcast from ${user}[${department}]: ${message}`;
+
+        targetNavbar.insertAdjacentElement('afterend', h3);
+
+        setTimeout(() => {
+            h3.className = 'form - control bg - light border - 0 small fadeAwayAnimation';
+        }, 5000);
+
+        setTimeout(() => {
+            h3.remove();
+        }, 6000);
+    }
 });
 
 connection.start().then(function () {
