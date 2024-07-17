@@ -7,101 +7,199 @@
 </nav>
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active px-2" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        <div class="container">
-            <div class="card o-hidden border-0 shadow-lg my-5">
-                <div class="card-body p-0">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="p-5">
-                                <div class="text-center">
-                                    <h1 class="text-dark mb-4">Register New User</h1>
-                                    <h6 class="text-dark mb-4">You can register a new user to the system from this panel.</h6>
-                                </div>
-                                <form id="registerForm" method="post" class="user">
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="firstname" aria-required="true" placeholder="First Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="lastname" aria-required="true" placeholder="Last Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="gender" aria-required="true" placeholder="Gender" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="contact" aria-required="true" placeholder="Contact Address" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <select class="form-control custom-select text-dark" name="DepartmentProgram" aria-required="true">
-                                                    <option value="" selected disabled hidden>Department / Program</option>
-                                                    <option value="Software Engineering">Software Engineering</option>
-                                                    <option value="Software Engineering (English)">Software Engineering (English)</option>
-                                                    <option value="Computer Engineering">Computer Engineering</option>
-                                                    <option value="Computer Engineering (English)">Computer Engineering (English)</option>
-                                                    <option value="Industrial Engineering">Industrial Engineering</option>
-                                                    <option value="Industrial Engineering (English)">Industrial Engineering (English)</option>
-                                                    <option value="Chemical Engineering">Chemical Engineering</option>
-                                                    <option value="Chemical Engineering (English)">Chemical Engineering (English)</option>
-                                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                                    <option value="Mechanical Engineering (English)">Mechanical Engineering (English)</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" id="hiredate" name="hiredate" class="form-control form-control-user" placeholder="Hire Date" onfocus="(this.type='date')">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" id="dateofbirth" name="dateofbirth" class="form-control form-control-user" placeholder="Date of Birth" onfocus="(this.type='date')">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="username" aria-required="true" placeholder="Email" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="new-password" aria-required="true" placeholder="Password" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="confirmpassword" aria-required="true" placeholder="Confirm Password" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <select class="form-control custom-select text-dark">
-                                                    <option value="" selected disabled hidden>Role</option>
-                                                    <option value="Student">Student</option>
-                                                    <option value="Instructor">Instructor</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Save</button>
+        <div class="row">
+            <div class="col-3 my-5">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true"><img src="/img/student.png" alt="New Student"><br /><p class="text-dark text-center">Add New Student</p></button>
+                    <br />
+                    <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><img src="/img/instructor.png" alt="New Instructor"><br /><p class="text-dark text-center">Add New Instructor</p></button>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="tab-content" id="v-pills-tabContent">
+               @**@ <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                        <div class="container">
+                            <div class="card o-hidden border-0 shadow-lg my-5">
+                                <div class="card-body p-0">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="p-5">
+                                                <div class="text-center">
+                                                    <h1 class="text-dark mb-4">Register New Student</h1>
+                                                    <h6 class="text-dark mb-4">You can register a new student to the system from this panel.</h6>
+                                                </div>
+                                                <form id="registerForm" method="post" action="/Panel/AddNewStudent" class="user">
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" autocomplete="firstName" name="firstName" aria-required="true" placeholder="First Name" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" autocomplete="lastname" name="lastName" aria-required="true" placeholder="Last Name" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" autocomplete="gender" name="gender" aria-required="true" placeholder="Gender" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" autocomplete="contact" name="contact" aria-required="true" placeholder="Contact Address" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <select class="form-control custom-select text-dark" name="programName" aria-required="true">
+                                                                    <option value="" selected disabled hidden>Program</option>
+                                                                    <option value="Yazılım Mühendisliği">Yazılım Mühendisliği</option>
+                                                                    <option value="Yazılım Mühendisliği (İngilizce)">Yazılım Mühendisliği (İngilizce)</option>
+                                                                    <option value="Bilgisayar Mühendisliği">Bilgisayar Mühendisliği</option>
+                                                                    <option value="Bilgisayar Mühendisliği (İngilizce)">Bilgisayar Mühendisliği (İngilizce)</option>
+                                                                    <option value="Endüstri Mühendisliği">Endüstri Mühendisliği</option>
+                                                                    <option value="Endüstri Mühendisliği (İngilizce)">Endüstri Mühendisliği (İngilizce)</option>
+                                                                    <option value="Kimya Mühendisliği">Kimya Mühendisliği</option>
+                                                                    <option value="Kimya Mühendisliği (İngilizce)">Kimya Mühendisliği (İngilizce)</option>
+                                                                    <option value="Makine Mühendisliği">Makine Mühendisliği</option>
+                                                                    <option value="Makine Mühendisliği (İngilizce)">Makine Mühendisliği (İngilizce)</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input type="text" id="dateofbirth" name="dateOfBirth" class="form-control form-control-user" placeholder="Date of Birth" onfocus="(this.type='date')">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="email" autocomplete="username" aria-required="true" placeholder="Email" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="phoneNumber" autocomplete="phoneNumber" aria-required="true" placeholder="Phone Number" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="password" autocomplete="new-password" aria-required="true" placeholder="Password" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="confirmPassword" autocomplete="confirmpassword" aria-required="true" placeholder="Confirm Password" />
+                                                            </div>
+                                                        </div>
+                                                        <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Save</button>
+                                                    </div>
+                                                </form>
+                                                <hr>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                                <hr>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </div> @*Add New Student Form*@
+
+               @**@ <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                        <div class="container">
+                            <div class="card o-hidden border-0 shadow-lg my-5">
+                                <div class="card-body p-0">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="p-5">
+                                                <div class="text-center">
+                                                    <h1 class="text-dark mb-4">Register New Instructor</h1>
+                                                    <h6 class="text-dark mb-4">You can register a new instructor to the system from this panel.</h6>
+                                                </div>
+                                                <form id="registerForm" method="post" action="/Panel/AddNewInstructor" class="user">
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="firstName" autocomplete="firstname" aria-required="true" placeholder="First Name" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="lastName" autocomplete="lastname" aria-required="true" placeholder="Last Name" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="gender" autocomplete="gender" aria-required="true" placeholder="Gender" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="contact" autocomplete="contact" aria-required="true" placeholder="Contact Address" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <select class="form-control custom-select text-dark" name="departmentName" aria-required="true">
+                                                                    <option value="" selected disabled hidden>Program</option>
+                                                                    <option value="Yazılım Mühendisliği">Yazılım Mühendisliği</option>
+                                                                    <option value="Yazılım Mühendisliği (İngilizce)">Yazılım Mühendisliği (İngilizce)</option>
+                                                                    <option value="Bilgisayar Mühendisliği">Bilgisayar Mühendisliği</option>
+                                                                    <option value="Bilgisayar Mühendisliği (İngilizce)">Bilgisayar Mühendisliği (İngilizce)</option>
+                                                                    <option value="Endüstri Mühendisliği">Endüstri Mühendisliği</option>
+                                                                    <option value="Endüstri Mühendisliği (İngilizce)">Endüstri Mühendisliği (İngilizce)</option>
+                                                                    <option value="Kimya Mühendisliği">Kimya Mühendisliği</option>
+                                                                    <option value="Kimya Mühendisliği (İngilizce)">Kimya Mühendisliği (İngilizce)</option>
+                                                                    <option value="Makine Mühendisliği">Makine Mühendisliği</option>
+                                                                    <option value="Makine Mühendisliği (İngilizce)">Makine Mühendisliği (İngilizce)</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input type="text" id="hiredate" name="hireDate" class="form-control form-control-user" placeholder="Hire Date" onfocus="(this.type='date')">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input type="text" id="dateofbirth" name="dateOfBirth" class="form-control form-control-user" placeholder="Date of Birth" onfocus="(this.type='date')">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="phoneNumber" autocomplete="phoneNumber" aria-required="true" placeholder="Phone Number" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="email" autocomplete="username" aria-required="true" placeholder="Email" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="password" autocomplete="new-password" aria-required="true" placeholder="Password" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <input class="form-control form-control-user" name="confirmPassword" autocomplete="confirmPassword" aria-required="true" placeholder="Confirm Password" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-floating mb-3">
+                                                                <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> @*Add New Instructor Form*@
                 </div>
             </div>
         </div>
