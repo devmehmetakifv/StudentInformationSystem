@@ -55,11 +55,10 @@
                 @await Html.PartialAsync("PanelShared/General/SidebarPartials/_AdminSidebar",user);
                 break;
             case 2:
-                @await Html.PartialAsync("PanelShared/General/SidebarPartials/_StudentSidebar", user)
-                ;
+                @await Html.PartialAsync("PanelShared/General/SidebarPartials/_StudentSidebar", user);
                 break;
             case 3:
-                @await Html.PartialAsync("PanelShared/General/SidebarPartials/_InstructorSidebar", user)
+                @await Html.PartialAsync("PanelShared/General/SidebarPartials/_InstructorSidebar", user);
                 break;
         }
         <!-- Content Wrapper -->

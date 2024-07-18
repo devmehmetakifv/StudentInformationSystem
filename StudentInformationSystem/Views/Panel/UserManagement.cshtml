@@ -1,4 +1,5 @@
-﻿<nav>
+﻿@model StudentInformationSystem.Entity.Concrete.ProgramDepartmentViewModel
+<nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">New User...</button>
         <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Edit User</button>
@@ -10,9 +11,9 @@
         <div class="row">
             <div class="col-3 my-5">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true"><img src="/img/student.png" alt="New Student"><br /><p class="text-dark text-center">Add New Student</p></button>
+                    <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true"><img src="/img/student.png" alt="New Student"><br /><b><p class="text-center" style="color:black;">Add New Student</p></b></button>
                     <br />
-                    <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><img src="/img/instructor.png" alt="New Instructor"><br /><p class="text-dark text-center">Add New Instructor</p></button>
+                    <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><img src="/img/instructor.png" alt="New Instructor"><br /><b><p class="text-center" style="color:black;">Add New Instructor</p></b></button>
                 </div>
             </div>
             <div class="col-9">
@@ -54,16 +55,10 @@
                                                             <div class="form-floating mb-3">
                                                                 <select class="form-control custom-select text-dark" name="programName" aria-required="true">
                                                                     <option value="" selected disabled hidden>Program</option>
-                                                                    <option value="Yazılım Mühendisliği">Yazılım Mühendisliği</option>
-                                                                    <option value="Yazılım Mühendisliği (İngilizce)">Yazılım Mühendisliği (İngilizce)</option>
-                                                                    <option value="Bilgisayar Mühendisliği">Bilgisayar Mühendisliği</option>
-                                                                    <option value="Bilgisayar Mühendisliği (İngilizce)">Bilgisayar Mühendisliği (İngilizce)</option>
-                                                                    <option value="Endüstri Mühendisliği">Endüstri Mühendisliği</option>
-                                                                    <option value="Endüstri Mühendisliği (İngilizce)">Endüstri Mühendisliği (İngilizce)</option>
-                                                                    <option value="Kimya Mühendisliği">Kimya Mühendisliği</option>
-                                                                    <option value="Kimya Mühendisliği (İngilizce)">Kimya Mühendisliği (İngilizce)</option>
-                                                                    <option value="Makine Mühendisliği">Makine Mühendisliği</option>
-                                                                    <option value="Makine Mühendisliği (İngilizce)">Makine Mühendisliği (İngilizce)</option>
+                                                                    @foreach(var program in Model.Programs)
+																	{
+                                                                        <option value="@program.Name">@program.Name</option>
+																	}
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -140,17 +135,11 @@
                                                         <div class="col-sm-6">
                                                             <div class="form-floating mb-3">
                                                                 <select class="form-control custom-select text-dark" name="departmentName" aria-required="true">
-                                                                    <option value="" selected disabled hidden>Program</option>
-                                                                    <option value="Yazılım Mühendisliği">Yazılım Mühendisliği</option>
-                                                                    <option value="Yazılım Mühendisliği (İngilizce)">Yazılım Mühendisliği (İngilizce)</option>
-                                                                    <option value="Bilgisayar Mühendisliği">Bilgisayar Mühendisliği</option>
-                                                                    <option value="Bilgisayar Mühendisliği (İngilizce)">Bilgisayar Mühendisliği (İngilizce)</option>
-                                                                    <option value="Endüstri Mühendisliği">Endüstri Mühendisliği</option>
-                                                                    <option value="Endüstri Mühendisliği (İngilizce)">Endüstri Mühendisliği (İngilizce)</option>
-                                                                    <option value="Kimya Mühendisliği">Kimya Mühendisliği</option>
-                                                                    <option value="Kimya Mühendisliği (İngilizce)">Kimya Mühendisliği (İngilizce)</option>
-                                                                    <option value="Makine Mühendisliği">Makine Mühendisliği</option>
-                                                                    <option value="Makine Mühendisliği (İngilizce)">Makine Mühendisliği (İngilizce)</option>
+                                                                    <option value="" selected disabled hidden>Department</option>
+                                                                    @foreach (var department in Model.Departments)
+                                                                    {
+                                                                        <option value="@department.Name">@department.Name</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -205,9 +194,138 @@
         </div>
     </div>
     <div class="tab-pane fade px-2" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-        ...
-    </div>
-    <div class="tab-pane fade px-2" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <div class="row" id="bringUserPanel">
+            <div class="container my-5 col-sm-6">
+                <div class="text-center">
+                    <h1 class="text-dark mb-4">Bring User to Edit</h1>
+                    <h6 class="text-dark mb-4">Enter user's firstname and lastname to bring them.</h6>
+                </div>
+                <form method="POST" id="bringUserForm">
+                    <div class="form-group row">
+                        <div class="col-sm-12 mb-3 mb-sm-0">
+                            <div class="form-floating mb-3">
+                                <input class="form-control form-control-user" autocomplete="firstName" id="inputFirstName" name="firstName" aria-required="true" placeholder="First Name" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-floating mb-3">
+                                <input class="form-control form-control-user" autocomplete="lastname" id="inputLastName" name="lastName" aria-required="true" placeholder="Last Name" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-floating mb-3">
+                                <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Bring</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row" id="userDetails" style="display:none;">
+            <div class="container">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="text-dark mb-4">Edit <span id="edit-title"></span>'s Profile</h1>
+                                    </div>
+                                    <form id="editUserForm" method="post" action="/Panel/EditUser" class="user">
+                                        <div class="form-group row">
+                                            <input class="form-control form-control-user" id="fillUserId" name="userId" autocomplete="userid" hidden />
+                                            <div class="col-sm-6 mb-3 mb-sm-0" id="fillFirstNameDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input class="form-control form-control-user" id="fillFirstName" name="firstName" autocomplete="firstname" aria-required="true" placeholder="First Name" required/>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6" id="fillLastNameDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input class="form-control form-control-user" id="fillLastName" name="lastName" autocomplete="lastname" aria-required="true" placeholder="Last Name" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6" id="fillGenderDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input class="form-control form-control-user" id="fillGender" name="gender" autocomplete="gender" aria-required="true" placeholder="Gender" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 mb-3 mb-sm-0" id="fillContactDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input class="form-control form-control-user" id="fillContact" name="contact" autocomplete="contact" aria-required="true" placeholder="Contact Address" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6" id="fillDepartmentNameDiv">
+                                                <div class="form-floating mb-3">
+                                                    <select class="form-control custom-select text-dark" id="fillDepartmentName" name="departmentName" aria-required="true">
+                                                        <option value="" selected disabled hidden>Department</option>
+                                                        @foreach (var department in Model.Departments)
+                                                        {
+                                                            <option value="@department.Name">@department.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6" id="fillProgramNameDiv">
+                                                <div class="form-floating mb-3">
+                                                    <select class="form-control custom-select text-dark" id="fillProgramName" name="programName" aria-required="true">
+                                                        <option value="" selected disabled hidden>Program</option>
+                                                        @foreach (var program in Model.Programs)
+                                                        {
+                                                            <option value="@program.Name">@program.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6" id="fillHireDateDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" id="fillHireDate" name="hireDate" class="form-control form-control-user" placeholder="Hire Date" onfocus="(this.type='date')">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6" id="fillDateOfBirthDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" id="fillDateOfBirth" name="dateOfBirth" class="form-control form-control-user" placeholder="Date of Birth" onfocus="(this.type='date')" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6" id="fillPhoneNumberDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input class="form-control form-control-user" id="fillPhoneNumber" name="phoneNumber" autocomplete="phoneNumber" aria-required="true" placeholder="Phone Number" reqired/>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6" id="fillEmailDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input class="form-control form-control-user" id="fillEmail" name="email" autocomplete="username" aria-required="true" placeholder="Email" required/>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-floating mb-3">
+                                                    <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade px-2" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
         ...
     </div>
 </div>
+<style>
+    /* Custom CSS to remove borders from nav-pills */
+    .nav-pills .nav-link {
+        border: none !important; /* Removes the border */
+        background-color: rgb(239, 239, 239);
+        box-shadow: 4px 4px 4px rgb(200, 200, 200) !important;
+    }
+
+    /* Optional: Add a custom background color and text color for active state */
+    .nav-pills .nav-link.active {
+        color: white !important;
+    }
+</style>

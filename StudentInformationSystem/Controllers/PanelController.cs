@@ -111,9 +111,16 @@ namespace StudentInformationSystem.Web.Controllers
 			return View();
 		}
 		[Authorize(Roles = "Admin")]
-		public IActionResult UserManagement()
+		public async Task<IActionResult> UserManagement()
 		{
-			return View(); 
+            var programs = await _programService.GetAllAsync();
+            var departments = await _departmentService.GetAllAsync();
+            ProgramDepartmentViewModel programDepartmentViewModel = new ProgramDepartmentViewModel
+            {
+                Programs = programs,
+                Departments = departments
+            };
+			return View(programDepartmentViewModel); 
 		}
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddNewStudent(string firstName,
@@ -200,6 +207,82 @@ namespace StudentInformationSystem.Web.Controllers
                 //Let's print all errors in result.Errors while returnin NotFound()
                 return NotFound("User could not be created! Error: " + result.Errors.First().Description);
             }
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult BringUser(string firstName, string lastName)
+        {
+            var user = _userService.GetUserByNames(firstName, lastName);
+            if (user.FirstName.ToLower() == firstName.ToLower() && user.LastName.ToLower() == lastName.ToLower())
+            {
+                return Json(new { success = true, data = user });
+            }
+            else
+            {
+                return Json(new { success = false, data = "User not found!" });
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetDepartments()
+        {
+            var departments = await _departmentService.GetAllAsync();
+            if (departments != null)
+            {
+                return Json(new { success = true, data = departments });
+            }
+            else
+            {
+                return Json(new { success = false, data = "There was an error fetching departments. Please contact your database administrator." });
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetPrograms()
+        {
+            var programs = await _programService.GetAllAsync();
+            if (programs != null)
+            {
+                return Json(new { success = true, data = programs });
+            }
+            else
+            {
+                return Json(new { success = false, data = "There was an error fetching programs. Please contact your database administrator." });
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditUser(string userId, string firstName, string lastName,
+                                                  string gender, string contact,  
+                                                  DateOnly dateOfBirth, string phoneNumber,
+                                                  string email, string departmentName = null,
+                                                  string programName = null,
+                                                  DateOnly? hireDate = null)
+        {
+            var existingUser = await _userService.GetByIdAsync(userId);
+            if (existingUser == null)
+            {
+                return NotFound("User not found.");
+            }
+            existingUser.FirstName = firstName;
+            existingUser.LastName = lastName;
+            existingUser.Gender = gender;
+            existingUser.Contact = contact;
+            existingUser.DateOfBirth = dateOfBirth;
+            existingUser.PhoneNumber = phoneNumber;
+            existingUser.Email = email;
+
+            if(departmentName != null)
+            {
+                existingUser.DepartmentID = _departmentService.GetDepartmentIdByName(departmentName);
+            }
+            if(programName != null)
+            {
+                existingUser.ProgramID = _programService.GetProgramIdByName(programName);
+            }
+            if(hireDate != null)
+            {
+                existingUser.HireDate = hireDate;
+            }
+
+            await _userService.UpdateAsync(existingUser);
+            return RedirectToAction("UserManagement");
         }
         [Authorize(Roles = "Admin")]
         public IActionResult CourseManagement()

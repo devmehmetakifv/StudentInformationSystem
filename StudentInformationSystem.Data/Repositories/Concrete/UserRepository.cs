@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using StudentInformationSystem.Data.Repositories.Abstract;
 using StudentInformationSystem.Data.Repositories.Generic.Concrete;
@@ -37,6 +39,19 @@ namespace StudentInformationSystem.Data.Repositories.Concrete
         public User GetUserByEmail(string email)
         {
             return _context.Users.FirstOrDefault(u => u.Email == email);
+        }
+        public User GetUserByNames(string firstName, string lastName)
+        {
+            var user = _context.Users.FirstOrDefault(p => p.FirstName.ToLower() == firstName.ToLower());
+            if (user == null)
+            {
+                user = _context.Users.FirstOrDefault(p => p.LastName.ToLower() == lastName.ToLower());
+            }
+            if (user == null)
+            {
+                return null;
+            }
+            return user;
         }
     }
 }

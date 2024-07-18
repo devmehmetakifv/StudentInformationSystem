@@ -52,5 +52,9 @@ namespace StudentInformationSystem.Business.Services
         {
             return _userRepository.GetUserByEmail(email);
         }
+        public User GetUserByNames(string firstName, string lastName)
+        {
+            return _userRepository.GetUserByNames(firstName, lastName);
+        }
     }
 }
