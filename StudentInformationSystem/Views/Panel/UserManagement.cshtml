@@ -1,4 +1,22 @@
-﻿@model StudentInformationSystem.Entity.Concrete.ProgramDepartmentViewModel
+﻿@using StudentInformationSystem.Business.Abstract
+@using StudentInformationSystem.Entity.Concrete
+@model StudentInformationSystem.Entity.Concrete.ProgramDepartmentUsersViewModel
+@inject IProgramService IProgramService
+@inject IDepartmentService IDepartmentService
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+    var failedMessage = TempData["FailedMessage"] as string;
+}
+<head>
+    <!-- Custom styles for this page -->
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+}
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">New User...</button>
@@ -312,8 +330,254 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade px-2" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-        ...
+    </div>
+    <div class="tab-pane fade px-2" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+        @{
+            List<User> students = new List<User>();
+            List<User> instructors = new List<User>();
+            List<User> admins = new List<User>();
+
+            foreach(var user in Model.Users)
+            {
+                switch (user.RoleId)
+                {
+                    case 1:
+						admins.Add(user);
+						break;
+                    case 2:
+                        students.Add(user);
+                        break;
+                    case 3:
+                        instructors.Add(user);
+						break;
+                }
+            }
+        }
+        <div class="tab-pane fade show active px-2" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="row">
+                <div class="col-3 my-5">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#listStudents" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true"><img src="/img/student.png" alt="New Student"><br /><b><p class="text-center" style="color:black;">List Students</p></b></button>
+                        <br />
+                        <button class="nav-link my-5" id="v-pills-profile-tab" data-toggle="pill" data-target="#listInstructors" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><img src="/img/instructor.png" alt="New Instructor"><br /><b><p class="text-center" style="color:black;">List Instructors</p></b></button>
+                        <br />
+                        <button class="nav-link my-5" id="v-pills-profile-tab" data-toggle="pill" data-target="#listAdmins" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><img src="/img/admin.png" alt="New Instructor"><br /><b><p class="text-center" style="color:black;">List Admins</p></b></button>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        @**@ <div class="tab-pane fade show active" id="listStudents" role="tabpanel" aria-labelledby="v-pills-home-tab">@*Add New Student Form*@
+                            <div class="card shadow mt-5">
+                                <div class="card-header">
+                                    <h6 class="m-0 font-weight-bold text-primary">Student List</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Delete</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Gender</th>
+                                                    <th>Contact</th>
+                                                    <th>Email</th>
+                                                    <th>Date of Birth</th>
+                                                    <th>Program</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var student in students)
+                                                {
+                                                    Program studentProgram = new Program();
+                                                    if(student.ProgramID.HasValue)
+                                                    {
+                                                        studentProgram = await IProgramService.GetByIdAsync(student.ProgramID.Value);
+                                                    }
+                                                    <tr>
+                                                        <form method="post">
+                                                        <th>
+                                                            <button type="button"
+                                                                    class="btn delete-user-btn"
+                                                                    data-user-id="@student.Id">
+                                                                <i class="fa fa-ban p-0 m-0" aria-hidden="true"></i>
+                                                            </button>
+                                                        </th>
+                                                        </form>
+                                                        <td>@student.FirstName</td>
+                                                        <td>@student.LastName</td>
+                                                        <td>@student.Gender</td>
+                                                        <td>@student.Contact</td>
+                                                        <td>@student.Email</td>
+                                                        <td>@student.DateOfBirth</td>
+                                                        <td>@studentProgram.Name</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Delete</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Gender</th>
+                                                    <th>Contact</th>
+                                                    <th>Email</th>
+                                                    <th>Date of Birth</th>
+                                                    <th>Program</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @**@ <div class="tab-pane fade" id="listInstructors" role="tabpanel" aria-labelledby="v-pills-profile-tab">@*Add New Instructor Form*@
+                            <div class="card shadow mt-5">
+                                <div class="card-header">
+                                    <h6 class="m-0 font-weight-bold text-primary">Instructor List</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Delete</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Gender</th>
+                                                    <th>Contact</th>
+                                                    <th>Email</th>
+                                                    <th>Date of Birth</th>
+                                                    <th>Hire Date</th>
+                                                    <th>Department</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var instructor in instructors)
+                                                {
+                                                    Department instructorDepartment = new Department();
+                                                    if (instructor.DepartmentID.HasValue)
+                                                    {
+                                                        instructorDepartment = await IDepartmentService.GetByIdAsync(instructor.DepartmentID.Value);
+                                                    }
+                                                    <tr>
+                                                        <form method="post">
+                                                        <th>
+                                                            <button type="button"
+                                                                    class="btn delete-user-btn"
+                                                                    data-user-id="@instructor.Id">
+                                                                <i class="fa fa-ban p-0 m-0" aria-hidden="true"></i>
+                                                            </button>
+                                                        </th>
+                                                        </form>
+                                                        <td>@instructor.FirstName</td>
+                                                        <td>@instructor.LastName</td>
+                                                        <td>@instructor.Gender</td>
+                                                        <td>@instructor.Contact</td>
+                                                        <td>@instructor.Email</td>
+                                                        <td>@instructor.DateOfBirth</td>
+                                                        <td>@instructor.HireDate</td>
+                                                        <td>@instructorDepartment.Name</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Delete</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Gender</th>
+                                                    <th>Contact</th>
+                                                    <th>Email</th>
+                                                    <th>Date of Birth</th>
+                                                    <th>Hire Date</th>
+                                                    <th>Department</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @**@ <div class="tab-pane fade" id="listAdmins" role="tabpanel" aria-labelledby="v-pills-profile-tab">@*Add New Instructor Form*@
+                            <div class="card shadow mt-5">
+                                <div class="card-header">
+                                    <h6 class="m-0 font-weight-bold text-primary">Admin List</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Delete</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Gender</th>
+                                                    <th>Contact</th>
+                                                    <th>Email</th>
+                                                    <th>Date of Birth</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var admin in admins)
+                                                {
+                                                    <tr>
+                                                        <form method="post">
+                                                        <th>
+                                                            <button type="button"
+                                                                    class="btn delete-user-btn"
+                                                                    data-user-id="@admin.Id">
+                                                                <i class="fa fa-ban p-0 m-0" aria-hidden="true"></i>
+                                                            </button>
+                                                        </th>
+                                                        </form>
+                                                        <td>@admin.FirstName</td>
+                                                        <td>@admin.LastName</td>
+                                                        <td>@admin.Gender</td>
+                                                        <td>@admin.Contact</td>
+                                                        <td>@admin.Email</td>
+                                                        <td>@admin.DateOfBirth</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Delete</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Gender</th>
+                                                    <th>Contact</th>
+                                                    <th>Email</th>
+                                                    <th>Date of Birth</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade shadow-lg justify-content-center" id="deleteUserModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form method="POST" action="/Panel/DeleteUser" id="deleteUserForm">
+                            <div class="form-group text-center">
+                                <h2 class="text-danger">Delete User</h2>
+                                <h5 class="text-dark">You are about to delete the selected user. Do you want to proceed?</h5>
+                                <input name="deleteUserId" type="hidden" id="deleteUserId" />
+                                <button type="submit" class="btn btn-primary text-center">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <style>

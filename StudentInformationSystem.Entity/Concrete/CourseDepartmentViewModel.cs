@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StudentInformationSystem.Entity.Concrete
 {
-    public class ProgramDepartmentViewModel
+    public class CourseDepartmentViewModel
     {
-        public IEnumerable<Program>? Programs { get; set; }
+        public IEnumerable<Course>? Courses { get; set; }
         public IEnumerable<Department>? Departments { get; set; }
     }
 }

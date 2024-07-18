@@ -21,6 +21,7 @@ namespace StudentInformationSystem.Web.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
+        private readonly ICourseService _courseService;
         public PanelController(
 			IEnrollmentService enrollmentService,
             UserManager<User> userManager,
@@ -29,7 +30,8 @@ namespace StudentInformationSystem.Web.Controllers
             ITicketService ticketService,
             IProgramService programService,
             IDepartmentService departmentService,
-            IUserStore<User> userStore)
+            IUserStore<User> userStore,
+            ICourseService courseService)
         {
             _enrollmentService = enrollmentService;
             _userManager = userManager;
@@ -40,6 +42,7 @@ namespace StudentInformationSystem.Web.Controllers
             _departmentService = departmentService;
             _userStore = userStore;
             _emailStore = GetEmailStore();
+            _courseService = courseService;
         }
         public IActionResult Index()
 		{
@@ -115,10 +118,12 @@ namespace StudentInformationSystem.Web.Controllers
 		{
             var programs = await _programService.GetAllAsync();
             var departments = await _departmentService.GetAllAsync();
-            ProgramDepartmentViewModel programDepartmentViewModel = new ProgramDepartmentViewModel
+            var users = await _userService.GetAllAsync();
+            ProgramDepartmentUsersViewModel programDepartmentViewModel = new ProgramDepartmentUsersViewModel
             {
                 Programs = programs,
-                Departments = departments
+                Departments = departments,
+                Users = users
             };
 			return View(programDepartmentViewModel); 
 		}
@@ -156,6 +161,7 @@ namespace StudentInformationSystem.Web.Controllers
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(student, "Student");
+                TempData["SuccessMessage"] = "Student registered successfuly!";
                 return RedirectToAction("UserManagement");
             }
             else 
@@ -200,6 +206,7 @@ namespace StudentInformationSystem.Web.Controllers
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(instructor, "Student");
+                TempData["SuccessMessage"] = "Instructor registered successfuly!";
                 return RedirectToAction("UserManagement");
             }
             else
@@ -282,12 +289,84 @@ namespace StudentInformationSystem.Web.Controllers
             }
 
             await _userService.UpdateAsync(existingUser);
+            TempData["SuccessMessage"] = "User updated successfuly!";
             return RedirectToAction("UserManagement");
         }
         [Authorize(Roles = "Admin")]
-        public IActionResult CourseManagement()
+        public async Task<IActionResult> DeleteUser(string deleteUserId)
         {
-            return View();
+            var user = await _userService.GetByIdAsync(deleteUserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            await _userService.DeleteAsync(deleteUserId);
+
+            TempData["SuccessMessage"] = "User deleted successfully!";
+            return RedirectToAction("UserManagement");
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CourseManagement()
+        {
+            var departments = await _departmentService.GetAllAsync();
+            var courses = await _courseService.GetAllAsync();
+            CourseDepartmentViewModel courseDepartmentViewModel = new CourseDepartmentViewModel
+            {
+                Courses = courses,
+                Departments = departments
+            };
+            return View(courseDepartmentViewModel);
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddNewCourse(string name, int credits, string description, string departmentName)
+        {
+            Course course = new Course()
+            {
+                Name = name,
+                Credit = credits,
+                Description = description,
+                DepartmentID = _departmentService.GetDepartmentIdByName(departmentName)
+            };
+            await _courseService.AddAsync(course);
+            TempData["SuccessMessage"] = "Course added successfully!";
+            return RedirectToAction("CourseManagement");
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult BringCourse(string courseName)
+        {
+            var course = _courseService.GetCourseByName(courseName);
+            if(course == null)
+            {
+                return Json(new { success = false, data = "Course not found!" });
+            }
+            else
+            {
+                return Json(new { success = true, data = course });
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditCourse(int courseId, string name, string description, int credits, string departmentName)
+        {
+            var existingCourse = await _courseService.GetByIdAsync(courseId);
+            if (existingCourse == null)
+            {
+                return NotFound("User not found.");
+            }
+            existingCourse.Name = name;
+            existingCourse.Description = description;
+            existingCourse.Credit = credits;
+            existingCourse.DepartmentID = _departmentService.GetDepartmentIdByName(departmentName);
+
+            await _courseService.UpdateAsync(existingCourse);
+            TempData["SuccessMessage"] = "Course updated successfuly!";
+            return RedirectToAction("CourseManagement");
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteCourse(int deleteCourseId)
+        {
+            await _courseService.DeleteAsync(deleteCourseId);
+            TempData["SuccessMessage"] = "Course deleted successfully!";
+            return RedirectToAction("CourseManagement");
         }
         [Authorize(Roles = "Admin")]
         public IActionResult ProgramManagement()

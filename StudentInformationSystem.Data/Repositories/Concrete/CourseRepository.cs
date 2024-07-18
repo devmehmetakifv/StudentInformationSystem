@@ -20,5 +20,9 @@ namespace StudentInformationSystem.Data.Repositories.Concrete
             var courses = _context.Courses.Where(c => c.DepartmentID == departmentId);
             return await courses.ToListAsync();
         }
+        public Course GetCourseByName(string courseName)
+        {
+            return _context.Courses.FirstOrDefault(c => c.Name == courseName);
+        }
     }
 }

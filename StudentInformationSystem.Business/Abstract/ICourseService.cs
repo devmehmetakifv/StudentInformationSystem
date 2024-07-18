@@ -16,5 +16,6 @@ namespace StudentInformationSystem.Business.Interfaces
         Task AddCourseAsync(Course course);
         Task UpdateCourseAsync(Course course);
         Task DeleteCourseAsync(int id);
+        Course GetCourseByName(string courseName);
     }
 }

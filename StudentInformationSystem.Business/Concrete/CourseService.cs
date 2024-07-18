@@ -51,5 +51,9 @@ namespace StudentInformationSystem.Business.Services
                 await _courseRepository.Delete(course);
             }
         }
+        public Course GetCourseByName(string courseName)
+        {
+            return _courseRepository.GetCourseByName(courseName);
+        }
     }
 }

@@ -134,3 +134,62 @@ $(document).ready(function () {
         }
     });
 });
+
+$('.delete-user-btn').click(function () {
+    var userId = $(this).data('user-id');
+    $('#deleteUserId').val(userId);
+    $('#deleteUserModal').modal('show');
+});
+
+$('#deleteUserForm').submit(function (e) {
+    $('#deleteUserModal').modal('hide');
+});
+
+$(document).ready(function () {
+    // 1: Admin
+    // 2: Student
+    // 3: Instructor
+    $('#bringCourseForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var formData = {
+            courseName: $('#inputCourseName').val(),
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/Panel/BringCourse',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    $('#bringCoursePanel').hide();
+
+                    var departmentName = departments.find(d => d.id === response.data.departmentID)?.name;
+                    $('#fillCourseId').val(response.data.id);
+                    $('#edit-title').text(response.data.name);
+
+                    $('#fillCourseName').val(response.data.name);
+                    $('#fillCourseDescription').val(response.data.description);
+                    $('#fillCredits').val(response.data.credit);
+                    $('#fillDepartmentName').val(departmentName);
+
+                    $('#courseDetails').show();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error fetching course.');
+            }
+        });
+    });
+});
+$('.delete-course-btn').click(function () {
+    var courseId = $(this).data('course-id');
+    $('#deleteCourseId').val(courseId);
+    $('#deleteCourseModal').modal('show');
+});
+
+$('#deleteUserForm').submit(function (e) {
+    $('#deleteUserModal').modal('hide');
+});

@@ -11,5 +11,6 @@ namespace StudentInformationSystem.Data.Repositories.Abstract
     public interface ICourseRepository : IGenericRepository<Course>
     {
         Task<IEnumerable<Course>> GetCoursesByDepartmentIdAsync(int departmentId);
+        public Course GetCourseByName(string courseName);
     }
 }
