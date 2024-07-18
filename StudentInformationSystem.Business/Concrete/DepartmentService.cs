@@ -23,5 +23,9 @@ namespace StudentInformationSystem.Business.Concrete
 		{
 			return _departmentRepository.GetDepartmentIdByName(departmentName);
 		}
-	}
+        public Department GetDepartmentByName(string departmentName)
+		{
+			return _departmentRepository.GetDepartmentByName(departmentName);
+		}
+    }
 }

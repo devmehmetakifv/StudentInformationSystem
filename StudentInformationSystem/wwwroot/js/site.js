@@ -146,9 +146,6 @@ $('#deleteUserForm').submit(function (e) {
 });
 
 $(document).ready(function () {
-    // 1: Admin
-    // 2: Student
-    // 3: Instructor
     $('#bringCourseForm').on('submit', function (e) {
         e.preventDefault();
 
@@ -193,3 +190,94 @@ $('.delete-course-btn').click(function () {
 $('#deleteUserForm').submit(function (e) {
     $('#deleteUserModal').modal('hide');
 });
+
+$(document).ready(function () {
+    $('#bringProgramForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var formData = {
+            programName: $('#inputProgramName').val(),
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/Panel/BringProgram',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    $('#bringProgramPanel').hide();
+
+                    var departmentName = departments.find(d => d.id === response.data.departmentID)?.name;
+                    $('#fillProgramId').val(response.data.id);
+                    $('#edit-title').text(response.data.name);
+
+                    $('#fillProgramName').val(response.data.name);
+                    $('#fillProgramDescription').val(response.data.description);
+                    $('#fillDurationInYears').val(response.data.durationInYears);
+                    $('#fillDepartmentName').val(departmentName);
+
+                    $('#programDetails').show();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error fetching program.');
+            }
+        });
+    });
+});
+
+$('.delete-program-btn').click(function () {
+    var programId = $(this).data('program-id');
+    $('#deleteProgramId').val(programId);
+    $('#deleteProgramModal').modal('show');
+});
+
+$('#deleteProgramForm').submit(function (e) {
+    $('#deleteProgramModal').modal('hide');
+});
+
+$(document).ready(function () {
+    $('#bringDepartmentForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var formData = {
+            departmentName: $('#inputDepartmentName').val(),
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/Panel/BringDepartment',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    $('#bringDepartmentPanel').hide();
+
+                    $('#fillDepartmentId').val(response.data.id);
+                    $('#edit-title').text(response.data.name);
+
+                    $('#fillDepartmentName').val(response.data.name);
+                    $('#fillDepartmentDescription').val(response.data.description);
+
+                    $('#departmentDetails').show();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error fetching department.');
+            }
+        });
+    });
+});
+
+$('.delete-department-btn').click(function () {
+    var departmentId = $(this).data('department-id');
+    $('#deleteDepartmentId').val(departmentId);
+    $('#deleteDepartmentModal').modal('show');
+});
+
+$('#deleteDepartmentForm').submit(function (e) {
+    $('#deleteDepartmentModal').modal('hide');
+})

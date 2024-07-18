@@ -20,5 +20,8 @@ namespace StudentInformationSystem.Business.Concrete
 		public int GetProgramIdByName(string programName){
 			return _programRepository.GetProgramIdByName(programName);
 		}
+		public Program GetProgramByName(string programName){
+            return _programRepository.GetProgramByName(programName);
+        }
 	}
 }

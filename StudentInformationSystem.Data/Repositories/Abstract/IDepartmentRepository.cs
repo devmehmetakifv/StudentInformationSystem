@@ -11,5 +11,6 @@ namespace StudentInformationSystem.Data.Repositories.Abstract
     public interface IDepartmentRepository : IGenericRepository<Department>
 	{
 		public int GetDepartmentIdByName(string departmentName);
-	}
+        public Department GetDepartmentByName(string departmentName);
+    }
 }

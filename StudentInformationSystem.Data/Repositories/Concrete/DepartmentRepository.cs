@@ -18,5 +18,9 @@ namespace StudentInformationSystem.Data.Repositories.Concrete
 		{
 			return _context.Departments.Where(d => d.Name == departmentName).Select(d => d.ID).FirstOrDefault();
 		}
+		public Department GetDepartmentByName(string departmentName)
+        {
+            return _context.Departments.Where(d => d.Name == departmentName).FirstOrDefault();
+        }
 	}
 }

@@ -369,16 +369,122 @@ namespace StudentInformationSystem.Web.Controllers
             return RedirectToAction("CourseManagement");
         }
         [Authorize(Roles = "Admin")]
-        public IActionResult ProgramManagement()
+        public async Task<IActionResult> ProgramManagement()
         {
-            return View();
+            var departments = await _departmentService.GetAllAsync();
+            var programs = await _programService.GetAllAsync();
+            ProgramDepartmentUsersViewModel programDepartmentViewModel = new ProgramDepartmentUsersViewModel
+            {
+                Programs = programs,
+                Departments = departments
+            };
+            return View(programDepartmentViewModel);
         }
         [Authorize(Roles = "Admin")]
-        public IActionResult DepartmentManagement()
+        public async Task<IActionResult> AddNewProgram(string name, int durationInYears, string description, string departmentName)
         {
-            return View();
+            Entity.Concrete.Program program = new Entity.Concrete.Program()
+            {
+                Name = name,
+                DurationInYears = durationInYears,
+                Description = description,
+                DepartmentID = _departmentService.GetDepartmentIdByName(departmentName)
+            };
+            await _programService.AddAsync(program);
+            TempData["SuccessMessage"] = "Program added successfully!";
+            return RedirectToAction("ProgramManagement");
         }
-		[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult BringProgram(string programName)
+        {
+            var program = _programService.GetProgramByName(programName);
+            if (program == null)
+            {
+                return Json(new { success = false, data = "Program not found!" });
+            }
+            else
+            {
+                return Json(new { success = true, data = program });
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditProgram(int programId, string name, string description, int durationInYears, string departmentName)
+        {
+            var existingProgram = await _programService.GetByIdAsync(programId);
+            if (existingProgram == null)
+            {
+                return NotFound("User not found.");
+            }
+            existingProgram.Name = name;
+            existingProgram.Description = description;
+            existingProgram.DurationInYears = durationInYears;
+            existingProgram.DepartmentID = _departmentService.GetDepartmentIdByName(departmentName);
+
+            await _programService.UpdateAsync(existingProgram);
+            TempData["SuccessMessage"] = "Program updated successfuly!";
+            return RedirectToAction("ProgramManagement");
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteProgram(int deleteProgramId)
+        {
+            await _programService.DeleteAsync(deleteProgramId);
+            TempData["SuccessMessage"] = "Program deleted successfully!";
+            return RedirectToAction("ProgramManagement");
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DepartmentManagement()
+        {
+            var departments = await _departmentService.GetAllAsync();
+            return View(departments);
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddNewDepartment(string name, string description)
+        {
+            Department department = new Department()
+            {
+                Name = name,
+                Description = description,
+            };
+            await _departmentService.AddAsync(department);
+            TempData["SuccessMessage"] = "Department added successfully!";
+            return RedirectToAction("DepartmentManagement");
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult BringDepartment(string departmentName)
+        {
+            var department = _departmentService.GetDepartmentByName(departmentName);
+            if (department == null)
+            {
+                return Json(new { success = false, data = "Department not found!" });
+            }
+            else
+            {
+                return Json(new { success = true, data = department });
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditDepartment(int departmentId, string name, string description)
+        {
+            var existingDepartment = await _departmentService.GetByIdAsync(departmentId);
+            if (existingDepartment == null)
+            {
+                return NotFound("Department not found.");
+            }
+            existingDepartment.Name = name;
+            existingDepartment.Description = description;
+
+            await _departmentService.UpdateAsync(existingDepartment);
+            TempData["SuccessMessage"] = "Department updated successfuly!";
+            return RedirectToAction("DepartmentManagement");
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteDepartment(int deleteDepartmentId)
+        {
+            await _departmentService.DeleteAsync(deleteDepartmentId);
+            TempData["SuccessMessage"] = "Department deleted successfully!";
+            return RedirectToAction("DepartmentManagement");
+        }
+        [Authorize(Roles = "Admin")]
 		public async Task<IActionResult> SupportTickets()
 		{
 			var tickets = await _ticketService.GetAllAsync();

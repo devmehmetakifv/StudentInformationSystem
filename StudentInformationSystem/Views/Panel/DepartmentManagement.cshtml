@@ -1,8 +1,22 @@
-﻿<nav>
+﻿@using StudentInformationSystem.Business.Abstract
+@using StudentInformationSystem.Entity.Concrete
+@model IEnumerable<StudentInformationSystem.Entity.Concrete.Department>
+@inject IDepartmentService IDepartmentService
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+    var failedMessage = TempData["FailedMessage"] as string;
+}
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+}
+<nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">New User...</button>
-        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Edit User</button>
-        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Delete User</button>
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">New Department...</button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Edit Department</button>
+        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Delete Department</button>
     </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
@@ -14,86 +28,24 @@
                         <div class="col-lg-12">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="text-dark mb-4">Register New User</h1>
-                                    <h6 class="text-dark mb-4">You can register a new user to the system from this panel.</h6>
+                                    <h1 class="text-dark mb-4">Add New Department</h1>
+                                    <h6 class="text-dark mb-4">You can add a new department to the system from this panel.</h6>
                                 </div>
-                                <form id="registerForm" method="post" class="user">
+                                <form id="registerForm" method="post" action="/Panel/AddNewDepartment" class="user">
                                     <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <div class="col-sm-12 mb-3 mb-sm-0">
                                             <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="firstname" aria-required="true" placeholder="First Name" />
+                                                <input class="form-control form-control-user" name="name" autocomplete="name" aria-required="true" placeholder="Name" />
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12">
                                             <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="lastname" aria-required="true" placeholder="Last Name" />
+                                                <input class="form-control form-control-user" name="description" autocomplete="description" aria-required="true" placeholder="Description" />
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12">
                                             <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="gender" aria-required="true" placeholder="Gender" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="contact" aria-required="true" placeholder="Contact Address" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <select class="form-control custom-select text-dark" name="DepartmentProgram" aria-required="true">
-                                                    <option value="" selected disabled hidden>Department / Program</option>
-                                                    <option value="Software Engineering">Software Engineering</option>
-                                                    <option value="Software Engineering (English)">Software Engineering (English)</option>
-                                                    <option value="Computer Engineering">Computer Engineering</option>
-                                                    <option value="Computer Engineering (English)">Computer Engineering (English)</option>
-                                                    <option value="Industrial Engineering">Industrial Engineering</option>
-                                                    <option value="Industrial Engineering (English)">Industrial Engineering (English)</option>
-                                                    <option value="Chemical Engineering">Chemical Engineering</option>
-                                                    <option value="Chemical Engineering (English)">Chemical Engineering (English)</option>
-                                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                                    <option value="Mechanical Engineering (English)">Mechanical Engineering (English)</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" id="hiredate" name="hiredate" class="form-control form-control-user" placeholder="Hire Date" onfocus="(this.type='date')">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" id="dateofbirth" name="dateofbirth" class="form-control form-control-user" placeholder="Date of Birth" onfocus="(this.type='date')">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="username" aria-required="true" placeholder="Email" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="new-password" aria-required="true" placeholder="Password" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control form-control-user" autocomplete="confirmpassword" aria-required="true" placeholder="Confirm Password" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <select class="form-control custom-select text-dark">
-                                                    <option value="" selected disabled hidden>Role</option>
-                                                    <option value="Student">Student</option>
-                                                    <option value="Instructor">Instructor</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-floating mb-3">
-                                                <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Save</button>
+                                                <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Add</button>
                                             </div>
                                         </div>
                                     </div>
@@ -107,9 +59,126 @@
         </div>
     </div>
     <div class="tab-pane fade px-2" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-        ...
+        <div class="row" id="bringDepartmentPanel">
+            <div class="container my-5 col-sm-6">
+                <div class="text-center">
+                    <h1 class="text-dark mb-4">Bring Department to Edit</h1>
+                    <h6 class="text-dark mb-4">Enter department's name to bring it.</h6>
+                </div>
+                <form method="POST" id="bringDepartmentForm">
+                    <div class="form-group row">
+                        <div class="col-sm-12 mb-3 mb-sm-0">
+                            <div class="form-floating mb-3">
+                                <input class="form-control form-control-user" autocomplete="departmentName" id="inputDepartmentName" name="departmentName" aria-required="true" placeholder="Department Name" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-floating mb-3">
+                                <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Bring</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row" id="departmentDetails" style="display:none;">
+            <div class="container">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="text-dark mb-4">Edit <span id="edit-title"></span> Department</h1>
+                                    </div>
+                                    <form id="editDepartmentForm" method="POST" action="/Panel/EditDepartment" class="user">
+                                        <div class="form-group row">
+                                            <input class="form-control form-control-user" id="fillDepartmentId" name="departmentId" autocomplete="departmentid" hidden />
+                                            <div class="col-sm-6 mb-3 mb-sm-0" id="fillDepartmentNameDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input class="form-control form-control-user" id="fillDepartmentName" name="name" autocomplete="departmentname" aria-required="true" placeholder="Department Name" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6" id="fillDepartmentDescriptionDiv">
+                                                <div class="form-floating mb-3">
+                                                    <input class="form-control form-control-user" id="fillDepartmentDescription" name="description" autocomplete="departmentdescription" aria-required="true" placeholder="Department Description" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-floating mb-3">
+                                                    <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="tab-pane fade px-2" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-        ...
+        <div class="card shadow mt-5">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Department List</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Delete</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var department in Model)
+                            {
+                                <tr>
+                                    <form method="post">
+                                    <th>
+                                        <button type="button"
+                                                class="btn delete-department-btn"
+                                                data-department-id="@department.ID">
+                                            <i class="fa fa-ban p-0 m-0" aria-hidden="true"></i>
+                                        </button>
+                                    </th>
+                                    </form>
+                                    <td>@department.Name</td>
+                                    <td>@department.Description</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Delete</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade shadow-lg justify-content-center" id="deleteDepartmentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form method="POST" action="/Panel/DeleteDepartment" id="deleteDepartmentForm">
+                        <div class="form-group text-center">
+                            <h2 class="text-danger">Delete Department</h2>
+                            <h5 class="text-dark">You are about to delete the selected department. Do you want to proceed?</h5>
+                            <input name="deleteDepartmentId" type="hidden" id="deleteDepartmentId" />
+                            <button type="submit" class="btn btn-primary text-center">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

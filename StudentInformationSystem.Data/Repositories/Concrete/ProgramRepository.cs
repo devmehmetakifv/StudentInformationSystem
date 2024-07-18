@@ -22,5 +22,9 @@ namespace StudentInformationSystem.Data.Repositories.Concrete
         {
             return _context.Programs.Where(p => p.DepartmentID == departmendId).ToList();
         }
-	}
+        public Program GetProgramByName(string programName)
+        {
+            return _context.Programs.FirstOrDefault(c => c.Name == programName);
+        }
+    }
 }

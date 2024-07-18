@@ -11,5 +11,6 @@ namespace StudentInformationSystem.Business.Abstract
 	public interface IDepartmentService : IGenericService<Department>
 	{
 		public int GetDepartmentIdByName(string departmentName);
-	}
+        public Department GetDepartmentByName(string departmentName);
+    }
 }

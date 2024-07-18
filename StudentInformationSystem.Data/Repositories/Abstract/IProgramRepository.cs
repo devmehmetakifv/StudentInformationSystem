@@ -12,5 +12,6 @@ namespace StudentInformationSystem.Data.Repositories.Abstract
 	{
 		public int GetProgramIdByName(string programName);
 		public IEnumerable<Program> GetProgramsWithDepartmendId(int departmendId);
-	}
+        public Program GetProgramByName(string programName);
+    }
 }

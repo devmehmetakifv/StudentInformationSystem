@@ -11,5 +11,6 @@ namespace StudentInformationSystem.Business.Abstract
 	public interface IProgramService : IGenericService<Program>
 	{
 		public int GetProgramIdByName(string programName);
-	}
+        public Program GetProgramByName(string programName);
+    }
 }
