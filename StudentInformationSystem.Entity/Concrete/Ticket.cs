@@ -25,6 +25,7 @@ namespace StudentInformationSystem.Entity.Concrete
         public DateTime TicketDate { get; set; }
         public string TicketRespondSenderUserName { get; set; }
         public string TicketRespondContent { get; set; }
+        public bool isAnswered { get; set; }
         public bool isResolved { get; set; }
     }
 }

@@ -6,6 +6,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using StudentInformationSystem.Business.Abstract;
 using StudentInformationSystem.Business.Interfaces;
 using StudentInformationSystem.Entity.Concrete;
+using MimeKit;
+using MailKit.Security;
+using StudentInformationSystem.Web.Models;
 
 namespace StudentInformationSystem.Web.Controllers
 {
@@ -491,17 +494,85 @@ namespace StudentInformationSystem.Web.Controllers
 			return View(tickets);
 		}
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> ReplyToTicket(int replyTicketId, string reply, string userNameWhoReplies)
         {
             var ticket = await _ticketService.GetByIdAsync(replyTicketId);
             ticket.TicketRespondContent = reply;
             ticket.TicketRespondSenderUserName = userNameWhoReplies;
-            ticket.isResolved = true;
+            ticket.isAnswered = true;
             await _ticketService.UpdateAsync(ticket);
             
             var tickets = await _ticketService.GetAllAsync();
             return View("SupportTickets", tickets);
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ResolvedTicket(int ticketId)
+        {
+            var ticket = await _ticketService.GetByIdAsync(ticketId);
+            ticket.isResolved = true;
+            await _ticketService.UpdateAsync(ticket);
+
+            var tickets = await _ticketService.GetAllAsync();
+            return RedirectToAction("SupportTickets");
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> NotResolvedTicket(int ticketId)
+        {
+            var ticket = await _ticketService.GetByIdAsync(ticketId);
+            ticket.isResolved = false;
+            await _ticketService.UpdateAsync(ticket);
+            return RedirectToAction("RedirectToSendEmail", new { ticketId = ticket.TicketId });
+        }
+        [Authorize]
+        public IActionResult RedirectToSendEmail(int ticketId)
+        {
+            var encryptedTicketId = ChecksumValidation.Encrypt(ticketId.ToString());
+            return RedirectToAction("SendEmail", new { ticketId = ticketId, key = encryptedTicketId });
+        }
+        [Authorize]
+        public async Task<IActionResult> SendEmail(int ticketId, string key)
+        {
+            var decryptedTicketId = ChecksumValidation.Decrypt(key);
+            if (ticketId.ToString() != decryptedTicketId)
+            {
+                return NotFound(); // Or any other appropriate response
+            }
+            else
+            {
+                var ticket = await _ticketService.GetByIdAsync(ticketId);
+                return View(ticket);
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> SendEmailToSupport(string senderEmail, string recipientEmail, string title, string body)
+        {
+            if (ModelState.IsValid)
+            {
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Sender : " + senderEmail, senderEmail));
+                message.To.Add(new MailboxAddress("Recipient : " + senderEmail, senderEmail));
+                message.Subject = title;
+
+                var bodyBuilder = new BodyBuilder();
+                bodyBuilder.HtmlBody = body;
+                message.Body = bodyBuilder.ToMessageBody();
+
+                message.ReplyTo.Add(new MailboxAddress("Response Address : " + senderEmail, senderEmail));
+
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                {
+                    await client.ConnectAsync("smtp.google.com", 587, SecureSocketOptions.StartTls);
+                    await client.AuthenticateAsync("devmehmetakifv@gmail.com", "@A1b2c3d4e5_@");
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                }
+                TempData["SuccessMessage"] = "E-mail sent successfuly!";
+                return RedirectToAction("Support");
+            }
+            return NotFound("There was an error sending email. Please try again later.");
         }
         private IUserEmailStore<User> GetEmailStore()
         {

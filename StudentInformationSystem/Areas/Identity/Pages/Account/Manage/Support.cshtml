@@ -11,6 +11,10 @@
 
 }
 @{
+    var successMessage = TempData["SuccessMessage"] as string;
+    var failedMessage = TempData["FailedMessage"] as string;
+}
+@{
     var user = await UserManager.FindByNameAsync(User.Identity.Name);
     List<Ticket> allTickets = new List<Ticket>();
     List<Ticket> unansweredTickets = new List<Ticket>();
@@ -22,350 +26,422 @@
         if (ticket.TicketSenderUserName == user.UserName)
         {
             userTickets.Add(ticket);
-            if(ticket.isResolved == true)
+            if(ticket.isAnswered == true)
             {
                 answeredTickets.Add(ticket);
             }
-            else if(ticket.isResolved == false)
+            else if (ticket.isAnswered == false)
             {
                 unansweredTickets.Add(ticket);    
             }
         }
     }
 }
-
-<h4 id="profile-title" class="text-dark"><i class="fas fa-headset fa-sm"></i>   @ViewData["Title"]</h4>
-<partial name="_StatusMessage" for="StatusMessage" />
-<p>If you face any problem or you have a suggestion to make, please let us know from the form below.</p>
-<hr />
-<div class="row">
-    <div class="col-md-8">
-        <form asp-page-handler="SubmitTicket" method="POST">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <label asp-for="Input.TicketTitle" class="form-label"></label>
-                        <input asp-for="Input.TicketTitle" class="form-control" autocomplete="ticketTitle" />
-                        <span asp-validation-for="Input.TicketTitle" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <label asp-for="Input.TicketType" class="form-label"></label>
-                        <select asp-for="Input.TicketType" class="form-control">
-                            <option value=""></option>
-                            <option value="Suggestion">&#8505;Suggestion</option>
-                            <option value="Emergency">&#9888;Emergency</option>
-                            <option value="High Emergency">&#9762;High Emergency</option>
-                        </select>
-                        <span asp-validation-for="Input.TicketType" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-floating">
-                <label asp-for="Input.TicketContent" class="form-label"></label>
-                <textarea asp-for="Input.TicketContent" class="form-control" autocomplete="ticketContent" rows="5"></textarea>
-                <span asp-validation-for="Input.TicketContent" class="text-danger"></span>
-                <input type="hidden" name="userName" value="@User.Identity.Name" />
-            </div>
-            <br />
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
-        </form>
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @successMessage
     </div>
-</div>
-<hr />
-<h4 id="profile-title" class="text-dark"><i class="fas fa-headset fa-sm"></i>   Answered Tickets</h4>
-@if (answeredTickets.Count == 0)
-{
-    <p>You do not have any answered support tickets.</p>
 }
-else{
-    foreach (var ticket in answeredTickets)
-    {
-        if (@ticket.TicketType == "Suggestion")
-        {
-            <div class="card mb-3" style="max-width: 100%; background-color: #4755d1;">
-                <div class="card-header text-white">
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">New Ticket...</button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Answered Tickets</button>
+        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Active Tickets</button>
+    </div>
+</nav>
+<div class="tab-content my-3" id="nav-tabContent">
+    <div class="tab-pane fade show active px-2" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <h4 id="profile-title" class="text-dark"><i class="fas fa-headset fa-sm"></i>   @ViewData["Title"]</h4>
+        <partial name="_StatusMessage" for="StatusMessage" />
+        <p>If you face any problem or you have a suggestion to make, please let us know from the form below.</p>
+        <hr />
+        <div class="row">
+            <div class="col-md-8">
+                <form asp-page-handler="SubmitTicket" method="POST">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
-                        <div class="col-lg-11 text-start" style="display:inline;">
-                            <i class="fas fa-circle-exclamation fa-lg" style="color: #161891; display: inline;"></i><b>          @ticket.TicketType</b>
-                            <span style="float: right;">@ticket.TicketDate</span>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <label asp-for="Input.TicketTitle" class="form-label"></label>
+                                <input asp-for="Input.TicketTitle" class="form-control" autocomplete="ticketTitle" />
+                                <span asp-validation-for="Input.TicketTitle" class="text-danger"></span>
+                            </div>
                         </div>
-                        <div class="col-lg-1 text-end" style="display:inline;">
-                            <form asp-page-handler="DeleteTicket" method="post" style="display:inline;" class="text-end" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
-                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
-                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                    </svg>
-                                </button>
-                            </form>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <label asp-for="Input.TicketType" class="form-label"></label>
+                                <select asp-for="Input.TicketType" class="form-control">
+                                    <option value=""></option>
+                                    <option value="Suggestion">&#8505;Suggestion</option>
+                                    <option value="Emergency">&#9888;Emergency</option>
+                                    <option value="High Emergency">&#9762;High Emergency</option>
+                                </select>
+                                <span asp-validation-for="Input.TicketType" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body text-dark bg-white">
-                    <h5 style="font-size: 25px; font-weight: normal;" class="card-title text-dark">@ticket.TicketTitle</h5>
-                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
+                    <div class="form-floating">
+                        <label asp-for="Input.TicketContent" class="form-label"></label>
+                        <textarea asp-for="Input.TicketContent" class="form-control" autocomplete="ticketContent" rows="5"></textarea>
+                        <span asp-validation-for="Input.TicketContent" class="text-danger"></span>
+                        <input type="hidden" name="userName" value="@User.Identity.Name" />
+                    </div>
                     <br />
-                    @if (@ticket.isResolved)
-                    {
-                        var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
-                        <div>
-                            <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                            <p class="card-text text-dark" style="display: inline-block; vertical-align: top;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
-                            <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;">İletişim: @respondSender.Email</p>
-                        </div>
-                    }
-                    else
-                    {
-                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                        <p class="card-text" style="display: inline-block; vertical-align: top;">Waiting Response... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Answer by our support team will be displayed here.)</span></p>
-                    }
-
-                </div>
-
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+                </form>
             </div>
-        }
-        if (@ticket.TicketType == "Emergency")
+        </div>
+    </div>
+    <div class="tab-pane fade px-2" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <h4 id="profile-title" class="text-dark"><i class="fas fa-headset fa-sm"></i>   Answered Tickets</h4>
+        @if (answeredTickets.Count == 0)
         {
-            <div class="card mb-3" style="max-width: 100%; background-color: #b5cf36;">
-                <div class="card-header text-white">
-                    <div class="row">
-                        <div class="col-lg-11 text-start" style="display:inline;">
-                            <i class="fa-solid fa-circle-exclamation fa-lg" style="color: #536b0f; display: inline; "></i><b>          @ticket.TicketType</b>
-                            <span style="float: right;">@ticket.TicketDate</span>
-                        </div>
-                        <div class="col-lg-1 text-end" style="display:inline;">
-                            <form asp-page-handler="DeleteTicket" method="post" style="display:inline;" class="text-end" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
-                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
-                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body text-dark bg-white">
-                    <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
-                    <br />
-                    @if (@ticket.isResolved)
-                    {
-                        var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
-                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical"></i>
-                        <p class="card-text" style="display: inline-block; vertical-align: top; max-height: 100px; overflow-y: auto;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
-                        <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
-
-                    }
-                    else
-                    {
-                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical"></i>
-                        <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
-                    }
-
-                </div>
-
-            </div>
+            <p>You do not have any answered support tickets.</p>
         }
-        if (@ticket.TicketType == "High Emergency")
+        else
         {
-            <div class="card mb-3" style="max-width: 100%; background-color: #de0f00;">
-                <div class="card-header text-white">
-                    <div class="row">
-                        <div class="col-lg-11 text-start" style="display:inline;">
-                            <i class="fas fa-circle-exclamation fa-lg" style="color: #DC4C64; display:inline;"></i><b>          @ticket.TicketType</b>
-                            <span style="float: right;">@ticket.TicketDate</span>
+            foreach (var ticket in answeredTickets)
+            {
+                if (@ticket.TicketType == "Suggestion")
+                {
+                    <div class="card mb-3 shadow" style="max-width: 100%; background-color: #4755d1;">
+                        <div class="card-header text-dark">
+                            <div class="row">
+                                <div class="col-lg-12 text-primary" style="display:inline;">
+                                    <i class="fa fa-info-circle text-info" style="display: inline;"></i><p class="text-info" style="display:inline-block;"><b>          @ticket.TicketType</b></p>
+                                    <span style="float: right;" class="text-end">@ticket.TicketDate</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-lg-1 text-end" style="display:inline;">
-                            <form asp-page-handler="DeleteTicket" method="post" style="display:inline;" class="text-end" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
-                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
-                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body text-dark bg-white">
-                    <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
-                    <br />
-                    @if (@ticket.isResolved)
-                    {
-                        var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
-                        <div>
-                            <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                            <p class="card-text" style="display: inline-block; vertical-align: top;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
-                            <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
-                        </div>
-                    }
-                    else
-                    {
-                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                        <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
-                    }
-
-                </div>
-
-            </div>
-        }
-    }
-}
-<h4 id="profile-title" class="text-dark"><i class="fas fa-headset fa-sm""></i>   Active Tickets</h4>
-@if (unansweredTickets.Count == 0)
-{
-    <p>You do not have any active support tickets.</p>
-}
-else{
-    foreach (var ticket in unansweredTickets)
-    {
-        if (@ticket.TicketType == "Suggestion")
-        {
-            <div class="card mb-3" style="max-width: 100%; background-color: #4755d1;">
-                <div class="card-header text-white">
-                    <div class="row">
-                        <div class="col-lg-11 text-start" style="display:inline;">
-                            <i class="fas fa-circle-exclamation fa-lg" style="color: #161891; display: inline;"></i><b>          @ticket.TicketType</b>
-                            <span style="float: right;">@ticket.TicketDate</span>
-                        </div>
-                        <div class="col-lg-1 text-end" style="display:inline;">
-                            <form asp-page-handler="DeleteTicket" method="post" style="display:inline;" class="text-end" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
-                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
-                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body text-dark bg-white">
-                    <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-            <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
-                    <br />
-                    @if(@ticket.isResolved)
-                    {
-                    var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
-                    <div>
-                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                        <p class="card-text text-dark" style="display: inline-block; vertical-align: top;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
-                        <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
-                    </div>
-                    }else{
-                    <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
-                    }
-
-                </div>
-
-            </div>
-        }
-        if (@ticket.TicketType == "Emergency")
-        {
-                   <div class="card mb-3" style="max-width: 100%; background-color: #b5cf36;">
-                       <div class="card-header text-white">
-                           <div class="row">
-                               <div class="col-lg-11 text-start" style="display:inline;">
-                                   <i class="fa-solid fa-circle-exclamation fa-lg" style="color: #536b0f; display: inline; "></i><b>          @ticket.TicketType</b>
-                                   <span style="float: right;">@ticket.TicketDate</span>
-                               </div>
-                               <div class="col-lg-1 text-end" style="display:inline;">
-                                   <form asp-page-handler="DeleteTicket" method="post" style="display:inline;" class="text-end" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
-                                       <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                       <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
-                                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
-                                               <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                           </svg>
-                                       </button>
-                                   </form>
-                               </div>
-                           </div>
-                       </div>
-                       <div class="card-body text-dark bg-white">
-                           <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
-                           <br />
-                           @if(@ticket.isResolved)
+                        <div class="card-body text-dark bg-white">
+                            <h5 style="font-size: 25px; font-weight: normal;" class="card-title text-dark"><b>@ticket.TicketTitle</b></h5>
+                            <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
+                            <br />
+                            @if (@ticket.isAnswered)
                             {
-                        var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
-                           <i class="fa-solid fa-arrows-turn-right fa-flip-vertical"></i>
-                        <p class="card-text" style="display: inline-block; vertical-align: top; max-height: 100px; overflow-y: auto;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
-                           <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
-
-                           }else{
-                           <i class="fa-solid fa-arrows-turn-right fa-flip-vertical"></i>
-                        <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
+                                var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
+                                <div class="row">
+                                    <div class="col-6">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>     @respondSender.FirstName @respondSender.LastName</b> answered: @ticket.TicketRespondContent</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
+                                    </div>
+                                    <hr />
+                                    <div class="col-6">
+                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                Not Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-6">
+                                    <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>Waiting Response...</b><span style="font-size: 13px; font-weight: normal; color: #666666;">(Answer by our support team will be displayed here.)</span></p>
+                                </div>
                             }
 
-                       </div>
-
-                   </div>
-        }
-        if (@ticket.TicketType == "High Emergency")
-        {
-            @* <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Earnings (Annual)
+                        </div>
+                    </div>
+                }
+                if (@ticket.TicketType == "Emergency")
+                {
+                    <div class="card mb-3 shadow" style="max-width: 100%; background-color: #4755d1;">
+                        <div class="card-header text-dark">
+                            <div class="row">
+                                <div class="col-lg-12 text-primary" style="display:inline;">
+                                    <i class="fa fa-exclamation-triangle text-warning" style="display: inline;"></i><p class="text-warning" style="display:inline-block;"><b>          @ticket.TicketType</b></p>
+                                    <span style="float: right;" class="text-end">@ticket.TicketDate</span>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div> *@
-            <div class="card mb-3" style="max-width: 100%; background-color: #de0f00;">
-                <div class="card-header text-white">
-                    <div class="row">
-                        <div class="col-lg-11 text-start" style="display:inline;">
-                            <i class="fas fa-circle-exclamation fa-lg" style="display:inline;"></i><h5 class="text-dark">          @ticket.TicketType</h5>
-                            <span style="float: right;">@ticket.TicketDate</span>
-                        </div>
-                        <div class="col-lg-1 text-end" style="display:inline;">
-                            <form asp-page-handler="DeleteTicket" method="post" style="display:inline;" class="text-end" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
-                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
-                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body text-dark bg-white">
-                    <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-            <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
-                    <br />
-                    @if(@ticket.isResolved)
-                    {
-                var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
-                    <div>
-                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                    <p class="card-text" style="display: inline-block; vertical-align: top;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
-                        <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
-                    </div>
-                    }else{
-                    <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
-                    }
+                        <div class="card-body text-dark bg-white">
+                            <h5 style="font-size: 25px; font-weight: normal;" class="card-title text-dark"><b>@ticket.TicketTitle</b></h5>
+                            <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
+                            <br />
+                            @if (@ticket.isAnswered)
+                            {
+                                var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
+                                <div class="row">
+                                    <div class="col-6">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>     @respondSender.FirstName @respondSender.LastName</b> answered: @ticket.TicketRespondContent</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
+                                    </div>
+                                    <hr />
+                                    <div class="col-6">
+                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                Not Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-6">
+                                    <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>Waiting Response...</b><span style="font-size: 13px; font-weight: normal; color: #666666;">(Answer by our support team will be displayed here.)</span></p>
+                                </div>
+                            }
 
-                </div>
+                        </div>
+                    </div>
+                }
+                if (@ticket.TicketType == "High Emergency")
+                {
+                    <div class="card mb-3 shadow" style="max-width: 100%; background-color: #4755d1;">
+                        <div class="card-header text-dark">
+                            <div class="row">
+                                <div class="col-lg-12 text-primary" style="display:inline;">
+                                    <i class="fa fa-exclamation-circle text-danger" style = "display: inline;"></i><p class="text-danger" style="display:inline-block;"><b>          @ticket.TicketType</b></p>
+                                    <span style="float: right;" class="text-end">@ticket.TicketDate</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-dark bg-white">
+                            <h5 style="font-size: 25px; font-weight: normal;" class="card-title text-dark"><b>@ticket.TicketTitle</b></h5>
+                            <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
+                            <br />
+                            @if (@ticket.isAnswered)
+                            {
+                                var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
+                                <div class="row">
+                                    <div class="col-6">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>     @respondSender.FirstName @respondSender.LastName</b> answered: @ticket.TicketRespondContent</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
+                                    </div>
+                                    <hr />
+                                    <div class="col-6">
+                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                Not Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-6">
+                                    <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>Waiting Response...</b><span style="font-size: 13px; font-weight: normal; color: #666666;">(Answer by our support team will be displayed here.)</span></p>
+                                </div>
+                            }
 
-            </div>
+                        </div>
+                    </div>
+                }
+            }
         }
-    }
-}
+    </div>
+    <div class="tab-pane fade px-2" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <h4 id="profile-title" class="text-dark"><i class="fas fa-headset fa-sm" "></i>   Active Tickets</h4>
+            @if (unansweredTickets.Count == 0)
+            {
+            <p>You do not have any active support tickets.</p>
+            }
+            else
+            {
+                foreach (var ticket in unansweredTickets)
+                {
+                    if (@ticket.TicketType == "Suggestion")
+                    {
+                    <div class="card mb-3 shadow" style="max-width: 100%; background-color: #4755d1;">
+                        <div class="card-header text-dark">
+                            <div class="row">
+                                <div class="col-lg-12 text-primary" style="display:inline;">
+                                    <i class="fa fa-info-circle text-warning" style="display: inline;"></i><p class="text-warning" style="display:inline-block;"><b>          @ticket.TicketType</b></p>
+                                    <span style="float: right;" class="text-end">@ticket.TicketDate</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-dark bg-white">
+                            <h5 style="font-size: 25px; font-weight: normal;" class="card-title text-dark"><b>@ticket.TicketTitle</b></h5>
+                            <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
+                            <br />
+                                @if (@ticket.isAnswered)
+                                {
+                                    var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
+                                <div class="row">
+                                    <div class="col-6">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>     @respondSender.FirstName @respondSender.LastName</b> answered: @ticket.TicketRespondContent</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
+                                    </div>
+                                    <hr />
+                                    <div class="col-6">
+                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                Not Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                }
+                                else
+                                {
+                                <div class="col-6">
+                                    <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>Waiting Response...</b><span style="font-size: 13px; font-weight: normal; color: #666666;">(Answer by our support team will be displayed here.)</span></p>
+                                </div>
+                                }
+
+                        </div>
+                    </div>
+                    }
+                    if (@ticket.TicketType == "Emergency")
+                    {
+                    <div class="card mb-3 shadow" style="max-width: 100%; background-color: #4755d1;">
+                        <div class="card-header text-dark">
+                            <div class="row">
+                                <div class="col-lg-12 text-primary" style="display:inline;">
+                                    <i class="fa fa-exclamation-triangle text-warning" style="display: inline;"></i><p class="text-warning" style="display:inline-block;"><b>          @ticket.TicketType</b></p>
+                                    <span style="float: right;" class="text-end">@ticket.TicketDate</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-dark bg-white">
+                            <h5 style="font-size: 25px; font-weight: normal;" class="card-title text-dark"><b>@ticket.TicketTitle</b></h5>
+                            <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
+                            <br />
+                                @if (@ticket.isAnswered)
+                                {
+                                    var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
+                                <div class="row">
+                                    <div class="col-6">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>     @respondSender.FirstName @respondSender.LastName</b> answered: @ticket.TicketRespondContent</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
+                                    </div>
+                                    <hr />
+                                    <div class="col-6">
+                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                Not Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                }
+                                else
+                                {
+                                <div class="col-6">
+                                    <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>Waiting Response...</b><span style="font-size: 13px; font-weight: normal; color: #666666;">(Answer by our support team will be displayed here.)</span></p>
+                                </div>
+                                }
+
+                        </div>
+                    </div>
+                    }
+                    if (@ticket.TicketType == "High Emergency")
+                    {
+                    <div class="card mb-3 shadow" style="max-width: 100%; background-color: #4755d1;">
+                        <div class="card-header text-dark">
+                            <div class="row">
+                                <div class="col-lg-12 text-primary" style="display:inline;">
+                                    <i class="fa fa-exclamation-circle text-danger" style="display: inline;"></i><p class="text-danger" style="display:inline-block;"><b>          @ticket.TicketType</b></p>
+                                    <span style="float: right;" class="text-end">@ticket.TicketDate</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-dark bg-white">
+                            <h5 style="font-size: 25px; font-weight: normal;" class="card-title text-dark"><b>@ticket.TicketTitle</b></h5>
+                            <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
+                            <br />
+                                @if (@ticket.isAnswered)
+                                {
+                                    var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
+                                <div class="row">
+                                    <div class="col-6">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>     @respondSender.FirstName @respondSender.LastName</b> answered: @ticket.TicketRespondContent</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
+                                    </div>
+                                    <hr />
+                                    <div class="col-6">
+                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                Not Resolved
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                }
+                                else
+                                {
+                                <div class="col-6">
+                                    <i class="fa fa-angle-double-right" aria-hidden="true" style="display:inline-block;"></i><p class="card-text text-dark" style="display: inline-block; vertical-align: top;"><b>Waiting Response...</b><span style="font-size: 13px; font-weight: normal; color: #666666;">(Answer by our support team will be displayed here.)</span></p>
+                                </div>
+                                }
+
+                        </div>
+                    </div>
+                    }
+                }
+            }
+    </div>
+</div>
     

@@ -1,0 +1,60 @@
+﻿@model StudentInformationSystem.Entity.Concrete.Ticket
+
+@{
+    ViewData["Title"] = "EmailSender";
+}
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+            rel="stylesheet" 
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+            crossorigin="anonymous">
+</head>
+<div class="container">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="text-dark mb-4">Still Having Problem?</h1>
+                            <h6 class="text-dark mb-4">We're sorry that we couldn't fix your problem. Please send us an email for further investigation.</h6>
+                        </div>
+                        <form id="sendEmailForm" method="post" action="/Panel/SendEmailToSupport" class="user">
+                            <div class="form-group row">
+                                <div class="col-sm-12 mb-3 mb-sm-0">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control form-control-user" name="senderEmail" id="floatingSenderEmail" autocomplete="senderemail" aria-required="true" placeholder="Sender Email" value="@Model.TicketSenderUserName"/>
+                                        <label for="floatingSenderEmail">Sender Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control form-control-user" name="recipientEmail" id="floatingRecipientEmail" autocomplete="recipientemail" aria-required="true" placeholder="Recipient Email" value="@Model.TicketRespondSenderUserName" />
+                                        <label for="floatingRecipientEmail">Recipient Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control form-control-user" name="title" id="floatingTitle" autocomplete="title" aria-required="true" placeholder="Title" />
+                                        <label for="floatingTitle">Title</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group mb-3">
+                                        <textarea class="form-control" id="Body" name="body" id="floatingBody" placeholder="Content" rows="10" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-floating mb-3">
+                                        <button id="registerSubmit" type="submit" class="btn btn-primary btn-user btn-block">Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

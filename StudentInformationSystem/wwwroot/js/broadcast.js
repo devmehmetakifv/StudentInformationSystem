@@ -8,7 +8,7 @@ var connection = new signalR.HubConnectionBuilder()
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, department, message) {
-
+    console.log(message)
     var h3 = document.getElementById('broadcastMessage');
     if (h3 !== null) {
         h3.textContent = `Broadcast from ${user}[${department}]: ${message}`;
