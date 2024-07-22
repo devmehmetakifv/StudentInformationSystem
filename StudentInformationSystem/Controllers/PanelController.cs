@@ -8,7 +8,9 @@ using StudentInformationSystem.Business.Interfaces;
 using StudentInformationSystem.Entity.Concrete;
 using MimeKit;
 using MailKit.Security;
+using MailKit.Net.Smtp;
 using StudentInformationSystem.Web.Models;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace StudentInformationSystem.Web.Controllers
 {
@@ -25,6 +27,7 @@ namespace StudentInformationSystem.Web.Controllers
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ICourseService _courseService;
+        private readonly IRoleService _roleService;
         public PanelController(
 			IEnrollmentService enrollmentService,
             UserManager<User> userManager,
@@ -34,7 +37,8 @@ namespace StudentInformationSystem.Web.Controllers
             IProgramService programService,
             IDepartmentService departmentService,
             IUserStore<User> userStore,
-            ICourseService courseService)
+            ICourseService courseService,
+            IRoleService roleService)
         {
             _enrollmentService = enrollmentService;
             _userManager = userManager;
@@ -46,6 +50,7 @@ namespace StudentInformationSystem.Web.Controllers
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _courseService = courseService;
+            _roleService = roleService;
         }
         public IActionResult Index()
 		{
@@ -547,32 +552,41 @@ namespace StudentInformationSystem.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> SendEmailToSupport(string senderEmail, string recipientEmail, string title, string body)
+        public async Task<IActionResult> SendEmailToSupport(string senderEmail, string recipientEmail, string title, string body, int ticketId)
         {
-            if (ModelState.IsValid)
+            var senderUser = _userService.GetUserByEmail(senderEmail);
+            var recipientUser = _userService.GetUserByEmail(recipientEmail);
+            var role = await _roleService.GetByIdAsync(recipientUser.RoleId);
+
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(senderUser.FirstName + "" + senderUser.LastName, senderEmail));
+            message.To.Add(new MailboxAddress(role.Name, recipientEmail));
+            message.Subject = title;
+            message.Body = new TextPart("plain") { Text = body };
+
+            using (var client = new SmtpClient())
             {
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Sender : " + senderEmail, senderEmail));
-                message.To.Add(new MailboxAddress("Recipient : " + senderEmail, senderEmail));
-                message.Subject = title;
-
-                var bodyBuilder = new BodyBuilder();
-                bodyBuilder.HtmlBody = body;
-                message.Body = bodyBuilder.ToMessageBody();
-
-                message.ReplyTo.Add(new MailboxAddress("Response Address : " + senderEmail, senderEmail));
-
-                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                try
                 {
-                    await client.ConnectAsync("smtp.google.com", 587, SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync("devmehmetakifv@gmail.com", "@A1b2c3d4e5_@");
-                    await client.SendAsync(message);
-                    await client.DisconnectAsync(true);
+                    client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                    client.Authenticate("devmehmetakifv@gmail.com", "afha ktev oass nvwq");
+                    client.Send(message);
+                    client.Disconnect(true);
+
+                    var ticket = await _ticketService.GetByIdAsync(ticketId);
+                    ticket.isResolved = false;
+                    ticket.UserResponse = "User sent email to support.";
+                    await _ticketService.UpdateAsync(ticket);
+                    TempData["SuccessMessage"] = "Mail has been sent successfully. Thanks for reaching us. Our team will review your mail and get back to you as soon as possible.";
                 }
-                TempData["SuccessMessage"] = "E-mail sent successfuly!";
-                return RedirectToAction("Support");
+                catch (Exception ex)
+                {
+                    // Log the exception (ex) here
+                    client.Disconnect(true);
+                    TempData["FailedMessage"] = "Mail couldn't be sent at the moment. Please try again later.";
+                }
+                return RedirectToAction("SupportTickets");
             }
-            return NotFound("There was an error sending email. Please try again later.");
         }
         private IUserEmailStore<User> GetEmailStore()
         {

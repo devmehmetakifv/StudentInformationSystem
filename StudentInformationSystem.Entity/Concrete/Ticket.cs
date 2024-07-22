@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StudentInformationSystem.Entity.Concrete
 {
@@ -27,5 +28,7 @@ namespace StudentInformationSystem.Entity.Concrete
         public string TicketRespondContent { get; set; }
         public bool isAnswered { get; set; }
         public bool isResolved { get; set; }
+        [AllowNull]
+        public string? UserResponse { get; set; }
     }
 }

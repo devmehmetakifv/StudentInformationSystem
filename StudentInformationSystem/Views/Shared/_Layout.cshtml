@@ -123,10 +123,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <!-- SignalR -->
-    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/broadcast.js"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
     <!-- Bootstrap core JavaScript-->
     <script src="~/vendor/jquery/jquery.min.js"></script>
@@ -145,5 +141,8 @@
     <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/demo/datatables-demo.js"></script>
+    <!-- SignalR -->
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/displayBroadcast.js"></script>
 </body>
 </html>

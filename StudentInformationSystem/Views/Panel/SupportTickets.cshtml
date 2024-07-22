@@ -29,6 +29,7 @@
                         <th>Date</th>
                         <th>Answered?</th>
                         <th>Solved?</th>
+                        <th>User Response</th>
                         <th>Answer</th>
                     </tr>
                 </thead>
@@ -57,14 +58,25 @@
                         <td>
                             @if(ticket.isResolved == false)
                             {
-                                <p>Awaiting user response...</p>
+                                <p>No</p>
                             }
                             else if(ticket.isResolved == true)
                             {
                                 <p>Yes</p>
                             }
                         </td>
-                        @if(ticket.isAnswered == false)
+                        <td>
+                        @if(ticket.UserResponse != null)
+                        {
+                            <p>@ticket.UserResponse</p>
+                        }
+                        else
+                        {
+                            <p>Awaiting user response...</p>
+                        }
+                        </td>
+
+                        @if(ticket.isAnswered == false && ticket.UserResponse == null)
                         {
                         <form method="POST">
                             <td>

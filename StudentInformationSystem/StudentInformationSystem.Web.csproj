@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\ajax.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\ajax.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MailKit" Version="4.7.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.6" />
@@ -29,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EmailService\EmailService.csproj" />
     <ProjectReference Include="..\StudentInformationSystem.Business\StudentInformationSystem.Business.csproj" />
     <ProjectReference Include="..\StudentInformationSystem.Data\StudentInformationSystem.Data.csproj" />
     <ProjectReference Include="..\StudentInformationSystem.Entity\StudentInformationSystem.Entity.csproj" />
@@ -38,6 +47,10 @@
     <Folder Include="Views\Shared\PanelShared\Instructor\" />
     <Folder Include="Views\Shared\PanelShared\Admin\" />
     <Folder Include="Views\Shared\PanelShared\Student\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\ajax.js" />
   </ItemGroup>
 
   <ItemGroup>
