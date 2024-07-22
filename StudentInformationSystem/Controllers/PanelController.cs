@@ -11,6 +11,7 @@ using MailKit.Security;
 using MailKit.Net.Smtp;
 using StudentInformationSystem.Web.Models;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using Hangfire;
 
 namespace StudentInformationSystem.Web.Controllers
 {
@@ -518,9 +519,9 @@ namespace StudentInformationSystem.Web.Controllers
             var ticket = await _ticketService.GetByIdAsync(ticketId);
             ticket.isResolved = true;
             await _ticketService.UpdateAsync(ticket);
-
-            var tickets = await _ticketService.GetAllAsync();
-            return RedirectToAction("SupportTickets");
+            BackgroundJob.Schedule(() => DeleteTicket(ticketId), TimeSpan.FromMinutes(1));
+            TempData["SuccessMessage"] = "Ticket marked as Resolved and will be deleted shortly. We're glad we could help.";
+            return Redirect("~/Identity/Account/Manage/Support");
         }
         [HttpPost]
         [Authorize]
@@ -543,7 +544,7 @@ namespace StudentInformationSystem.Web.Controllers
             var decryptedTicketId = ChecksumValidation.Decrypt(key);
             if (ticketId.ToString() != decryptedTicketId)
             {
-                return NotFound(); // Or any other appropriate response
+                return Unauthorized();
             }
             else
             {
@@ -577,16 +578,21 @@ namespace StudentInformationSystem.Web.Controllers
                     ticket.isResolved = false;
                     ticket.UserResponse = "User sent email to support.";
                     await _ticketService.UpdateAsync(ticket);
+                    BackgroundJob.Schedule(() => DeleteTicket(ticketId), TimeSpan.FromMinutes(1));
+
                     TempData["SuccessMessage"] = "Mail has been sent successfully. Thanks for reaching us. Our team will review your mail and get back to you as soon as possible.";
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    // Log the exception (ex) here
                     client.Disconnect(true);
                     TempData["FailedMessage"] = "Mail couldn't be sent at the moment. Please try again later.";
                 }
-                return RedirectToAction("SupportTickets");
+                return Redirect("~/Identity/Account/Manage/Support");
             }
+        }
+        public async Task DeleteTicket(int ticketId)
+        {
+            await _ticketService.DeleteAsync(ticketId);
         }
         private IUserEmailStore<User> GetEmailStore()
         {

@@ -129,22 +129,31 @@
                                         <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
                                     </div>
                                     <hr />
-                                    <div class="col-6">
-                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-success">
-                                                Resolved
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="col-6">
-                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
-                                                Not Resolved
-                                            </button>
-                                        </form>
-                                    </div>
+                                    @if (ticket.UserResponse == null)
+                                    {
+                                        <div class="col-6">
+                                            <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                    Not Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-6 text-end">
+                                            <p> Email sent to support system. This ticket will be deleted in 30 mins. </p>
+                                        </div>
+                                    }
                                 </div>
                             }
                             else
@@ -183,22 +192,31 @@
                                         <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
                                     </div>
                                     <hr />
-                                    <div class="col-6">
-                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-success">
-                                                Resolved
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="col-6">
-                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
-                                                Not Resolved
-                                            </button>
-                                        </form>
-                                    </div>
+                                    @if (ticket.UserResponse == null)
+                                    {
+                                        <div class="col-6">
+                                            <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                    Not Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-6">
+                                            <p class="text-end"> Email sent to support system. This ticket will be deleted in 30 mins. </p>
+                                        </div>
+                                    }
                                 </div>
                             }
                             else
@@ -237,22 +255,31 @@
                                         <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
                                     </div>
                                     <hr />
-                                    <div class="col-6">
-                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-success">
-                                                Resolved
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="col-6">
-                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
-                                                Not Resolved
-                                            </button>
-                                        </form>
-                                    </div>
+                                    @if (ticket.UserResponse == null)
+                                    {
+                                        <div class="col-6">
+                                            <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                    Not Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-6 text-end">
+                                            <p> Email sent to support system. This ticket will be deleted in 30 mins. </p>
+                                        </div>
+                                    }
                                 </div>
                             }
                             else
@@ -304,22 +331,31 @@
                                         <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
                                     </div>
                                     <hr />
-                                    <div class="col-6">
-                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-success">
-                                                Resolved
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="col-6">
-                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
-                                                Not Resolved
-                                            </button>
-                                        </form>
-                                    </div>
+                                        @if (ticket.UserResponse == null)
+                                        {
+                                        <div class="col-6">
+                                            <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                    Not Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                        }
+                                        else
+                                        {
+                                        <div class="col-6">
+                                            <p class="text-end"> Email sent to support system. This ticket will be deleted in 30 mins. </p>
+                                        </div>
+                                        }
                                 </div>
                                 }
                                 else
@@ -358,22 +394,31 @@
                                         <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
                                     </div>
                                     <hr />
-                                    <div class="col-6">
-                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-success">
-                                                Resolved
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="col-6">
-                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
-                                                Not Resolved
-                                            </button>
-                                        </form>
-                                    </div>
+                                        @if (ticket.UserResponse == null)
+                                        {
+                                        <div class="col-6">
+                                            <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                    Not Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                        }
+                                        else
+                                        {
+                                        <div class="col-6">
+                                            <p class="text-end"> Email sent to support system. This ticket will be deleted in 30 mins. </p>
+                                        </div>
+                                        }
                                 </div>
                                 }
                                 else
@@ -412,22 +457,31 @@
                                         <p class="card-text text-dark" style="display: inline-block; vertical-align: top; float: right; font-weight: normal;"><b>Contact:</b><i>  @respondSender.Email</i></p>
                                     </div>
                                     <hr />
-                                    <div class="col-6">
-                                        <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-success">
-                                                Resolved
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="col-6">
-                                        <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
-                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
-                                            <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
-                                                Not Resolved
-                                            </button>
-                                        </form>
-                                    </div>
+                                        @if (ticket.UserResponse == null)
+                                        {
+                                        <div class="col-6">
+                                            <form action="/Panel/ResolvedTicket" method="post" class="text-start" onsubmit="return confirm('You are about to mark this ticket as Resolved. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <form action="/Panel/NotResolvedTicket" method="post" class="text-end" onsubmit="return confirm('You are about to mark this ticket as Not Resolved. You will be taken to Email Sending page to send an email to support team. Do you want to proceed?');">
+                                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                                <button type="submit" class="btn btn-sm btn-danger" style="float: right;">
+                                                    Not Resolved
+                                                </button>
+                                            </form>
+                                        </div>
+                                        }
+                                        else
+                                        {
+                                        <div class="col-6 text-end">
+                                            <p class=""> Email sent to support system. This ticket will be deleted in 30 mins. </p>
+                                        </div>
+                                        }
                                 </div>
                                 }
                                 else

@@ -9,10 +9,14 @@ namespace StudentInformationSystem.Web.Controllers
     public class JobController : ControllerBase
     {
         [HttpPost]
-        [Route("CreateBackgroundJob")]
-        public ActionResult CreateBackgroundJob()
+        [Route("CreateRecurringJob")]
+        public ActionResult CreateRecurringJob()
         {
-            BackgroundJob.Enqueue(() => Console.WriteLine("Hello, world!"));
+            RecurringJob.AddOrUpdate(
+                "CreateRecurringJob",
+                () => Console.WriteLine("Recurring!"),
+                Cron.Minutely);
+
             return Ok();
         }
     }
